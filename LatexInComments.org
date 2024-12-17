@@ -2,6 +2,8 @@
 
 Emacs package to render LaTeX math blocks in code comments as overlays
 
+https://github.com/esquellington/LatexInComments
+
 file:laic.el
 
 * References
@@ -215,4 +217,3 @@ Align*
   \text{div} \vec f &= \nabla \cdot \vec f \\
   \text{curl} \vec f &= \nabla \times \vec f \\
 \end{align*}
-* TODO Separate repo
