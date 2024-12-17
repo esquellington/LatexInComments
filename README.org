@@ -1,0 +1,1 @@
+Emacs package to render LaTeX math blocks in code comments as overlays

@@ -1,0 +1,218 @@
+#+STARTUP: indent
+
+Emacs package to render LaTeX math blocks in code comments as overlays
+
+file:laic.el
+
+* References
+- texfrag-moode
+  - Enable C-c C-p C-p for preview-at-point or preview-region
+  - Remove with preview-clearout-buffer
+  - See file:latex.cpp for inline math in comments
+  - DOES NOT WORK
+    - Same issue as here https://latex.org/forum/viewtopic.php?t=27378
+- See [[https://github.com/mneri/pnglatex][pnglatex]], works very well
+  - Could do the same ops from elisp
+  - Support math-environment as part of formula text, no point in
+    having to specify it explicitly
+- See http://mazack.org/unix/tex2png.php, also useful
+- This explains how to create overlays and image tooltips
+  http://kitchingroup.cheme.cmu.edu/blog/2016/03/21/Displaying-image-overlays-on-image-filenames-in-Emacs/
+* DONE Requirements
+   EASY LaTeX math preview in C/C++ comments
+** Should work like texfrag-region/document, but for whole comments/functions/files
+- See texfrag code, looks complex and uses auctex, which DOES NOT WORK IN
+  WINDOWS
+- It also uses preview for intermediate steps, which seems to be a
+  generic way to do this in emacs
+** 0-config, work by default
+*** Avoid dependencies, try to invoke latex/dvips directly and display overlay
+*** NO need to flag latex blocks, just look for $x$, $$x$$, \[x\] and \begin{}\end{} pairs like texfrag does
+*** Automatic scaling of formulas to font size (should be readable by default)
+** 0-interference
+*** KEEP plain text edit of comments working at ALL TIMES
+*** if cursor is in a formula, disable the preview while there
+* DONE Call latex*dvipng to get formula image .png
+- Autogen temp .tex with proper document class and includes
+- Generate proper size image
+- latex/dvipng/convert -trim also works for any latex "page"
+- .tex must have simple structure
+- .tex should have \pagestyle{empty} to avoid page number at bottom
+  from stopping convert -trim
+* DONE Insert .png image in Emacs buffer
+- As overlay??
+- Toggle between text/formula
+* DONE Name it --> laic
+- laic = latex-in-comments
+- love = latex-overlay
+- loverlay
+- overlaytex
+- clover = comments latex overlay
+- glasstex? put them on and see formulas?
+- greekvision? geek/greek vision
+* DONE Set proper colors
+- Set fore/background color to proper values from Emacs theme at 1st
+  latex block delimiter
+* DONE Extend to all formulas in a region or buffer
+- Use regexp to match all delimiter pairs, and gather points begin,end
+- Gen overlay image for each match
+- match only in comments, not everywhere?
+  - texfrag has texfrag-comments-only
+* DONE Optionally run in comments only
+* DONE Package as a minor mode with keybindings
+** DONE public functions
+** DONE Use org-sketch niceties
+*** DONE create dir /laic separate form current, create temporaries there
+*** DONE delete-file
+*** DONE executable-find
+** DONE install in /lisp
+- require in init.el
+- setup keybindings in init.el
+- only in prog-mode-hook
+** DONE Header comment block
+* DONE laic-create-overlays-from-comment-inside
+- All blocks in surrounding comment
+* DONE Ensure non-interactive funcs do NOT CHANGE POINT
+- This is a mess, many funcs change point, and we don't want to have implicit
+  behaviour, so we'll save-excursion in ALL of them, and place point explicitly
+  when required
+* DONE Find other latex block types
+- HARDCODED is fine for now
+** DONE \[ \]
+** DONE Custom list of begin/end delimiters
+*** DONE Custom list
+*** DONE For search begin/end, find closest wrt point and return list or values
+- just keep MAX if backwards, and MIN if forward
+** DONE Others? --> DON'T BOTHER
+- $ and $$,$$ will be tricky because they're symmetric begin/end
+- texfrag probably does this, check code
+  - texfrag-next-frag-function
+- Regexp to match region?
+  - SO it seems regex CANNOT match balanced structs, so \[a\] \[b\]
+    are matched as a SINGLE string, instead of 2 groups
+  - Thus, we should only match the MATH_BEGIN and from there match the first
+    MATH_END forward
+- Probably the best commands would be
+  - "convert closest not yet converted"
+    - So, search back and if there's a BEGIN closer than an END, then
+      search forward for an END
+  - "toggle closest"
+  - closest = begin/end region containing cursor, otherwise immediate next
+* DONE Add custom package list to latex header
+- Just a string of comma-separated package names, for now
+* DONE Optimization --> not easy... org-latex-preview is ALSO slow, only caching halps
+- it's a bit slow, so make it faster
+** DONE Limit search to current best not buffer point min/max
+- works but not significantly faster
+** DONE Also stop searching executables for every single create overlay
+- NO difference at all
+** DONE Try single shell call for all exes chained, separated by ;
+- May not make any difference... I tried benchmarking 4x shell-command calls vs
+  1x doing 4x commands sparated by ;, and difference is negligible
+** org preview is SLOW first time, but FASTER successive times
+
+Run with C-c C-x C-l (inside block for single, outside bloc for whole section)
+
+\[ C=\|p_0-p_1\| = 0 \]
+\[ \grad C = \begin{bmatrix} \pdv{C}{p_0} & \pdv{C}{p_1} \end{bmatrix} \]
+\[
+   \dd[4]{x} = \begin{bmatrix} a & b \\ c & d \end{bmatrix}
+\]
+Equation
+             \begin{equation} x=y \end{equation}
+Equation*
+             \begin{equation*}
+               \alpha = \beta
+             \end{equation*}
+Align*
+             \begin{align*}
+               \alpha &= \beta \\
+               \gamma &= \delta
+             \end{align*}
+** DONE MUCH FASTER without \usepackage{physics}
+** DONE 10% faster using \documentclass{minimal} instead of {article}
+- BUT minimal is not recommended because it lacks support for font sizes, and
+  some basic func... so better avoid it
+** DONE Skipping convert -trim saves 40%! (1.1->0.66) --> using "dvipng -T tight" 0.7!
+- timings over (article)
+- SO, could we just generate smaller .dvi or .png and skip convert -trim?
+- YESS! "dvipng -T tight" is almost free and produces already trimmed .png!
+** DONE Merging all commands into single shell-command is slightly faster
+** DONE Consider sending latex output to dvipng through pipe --> THiS is just yak shaving, DO NOT DO IT
+- dvipng has a --follow option that seems to read while latex is outputting and
+  may be faster
+- profile latex + dvipng with:
+  shell > time latex --interaction=batchmode PROVA.tex; time dvipng -q -D 200 -T tight -bg "rgb 1 0 0" -fg "rgb 0 1 0" PROVA.dvi -o PROVA.png
+* DONE LaTeX packages for diff eq --> Cool but let's keep it simple, adding extra packages makes laic commands MUCH SLOWER
+- physics seems criticised and VERY slow (3x slower than just
+  amsmath+amsfonts!), consider alternatives
+- diffcoeff looks good
+  https://www.ctan.org/texarchive/macros/latex/contrib/diffcoeff, last version
+  is from 2019
+- this one is also recommended and newer https://www.ctan.org/pkg/derivative,
+  last version is from 2021. Macros look nicer/simpler than diffcoeff
+* DONE Cleanup .png images after showing overlay!
+- For some reason if .png is deleted after creating img, it does not display
+- BUT if I create overlay and then delete the .png manually, it shows correctly
+- SO, we should delay .png deletion
+* DONE Remove only overlays created by laic
+* TODO Single command/keybinding C-c C-x C-l "DWIM" like org-latex-preview
+- If inside block, preview it
+- If outside block, preview all blocks
+- SEPARATE command to preview current-or-next?
+  \[ a+b =c \]
+- I think
+* TODO Toggle overlay on/off with same keys?
+- remove-overlays can be called with BEGIN END, good for toggle, BUT would apply
+  to all overlays
+- So we'd better look for laic--list-overlays in begin/end range and remove
+  those (ex: current coment begin/end range)
+- SO, if point-in-comment, AND there's SOME overlay in the comment, remove all,
+  otherwise, create all?
+- OR maybe same but if point-in-latex-block, remove it, otherwise, create it
+* TODO WON'T DO
+** TODO Better overlays
+*** TODO laic-remove-overlays --> ONLY owned overlays
+**** TODO Save in list OR assign specific property to identify laic-created overlays
+**** TODO Find current/closest/next overlay with https://www.gnu.org/software/emacs/manual/html_node/elisp/Finding-Overlays.html
+*** TODO Consider ov package for overlay niceties
+** TODO Consider tooltip instead of overlay
+- This explains how to create overlays and image tooltips
+  http://kitchingroup.cheme.cmu.edu/blog/2016/03/21/Displaying-image-overlays-on-image-filenames-in-Emacs/
+- Less intrusive
+- Optional, would work the similarly, but only inside begin/end, and render as
+  tooltip, ideally of any size
+- Ideally create image the SAME way, but only show it as overlay
+- MUST cache it or it'll be very slow
+** TODO Syntax-highlight latex blocks in comments
+- Highlight subtly even when no overlay has been created, ideally subtly
+  different shade of comment color, I think Org does something similar
+** TODO LatexInCode > LaterInComments
+- Instead of just converting comments to latex, consider converting come code
+  text (variables) into LaTeX, ex "alpha" --> "\alpha", subindices, etc
+- This is probably useless, forget it
+* TODO BUGS
+** TODO Foreground color is sometimes wrong
+- Background is always correct though
+- Could it happen on stuff not in screen only? not sure how to repro it
+- If we stick to "in-comments" version, then we could just get the
+  color from comment font lock properties
+* TODO BENCHMARK preview
+\begin{align*}
+  \alpha &= \beta \\
+  C &= \|p_0-p_1\| = 0 \\
+  I &= \int_a^b f(\mathbf x) dx \\
+  \alpha &= ( \beta + \eta ) \\
+  \gamma &= [ \delta - \nu ] \\
+  M &= \begin{bmatrix}
+     M_{xx} & M_{xy} & M_{xz} \\
+     M_{yx} & M_{yy} & M_{yz} \\
+     M_{zx} & M_{zy} & M_{zz} \\
+     \end{bmatrix} \\
+  \nabla &= (\frac{\partial}{\partial x},\frac{\partial}{\partial y},\frac{\partial}{\partial z}) \\
+  \nabla f &=(\frac{\partial f}{\partial x},\frac{\partial f}{\partial y},\frac{\partial f}{\partial z}) \\
+  \Delta f &= \nabla^2 f = \nabla \cdot \nabla f \\
+  \text{div} \vec f &= \nabla \cdot \vec f \\
+  \text{curl} \vec f &= \nabla \times \vec f \\
+\end{align*}
+* TODO Separate repo
