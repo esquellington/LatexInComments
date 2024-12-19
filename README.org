@@ -20,9 +20,9 @@ to produce output images, and renders them as overlays.
 
 * Installation
 
-laic can only be installed through direct download, at the
-moment. Just copy [[file:laic.el]] to your local lisp folder and require
-it in your init.el
+Can only be installed through direct download, at the moment. Just
+copy [[file:laic.el]] to your local lisp folder and require it in your
+init.el
 
 The following elisp code adds a hook to all programming modes that
 loads *laic* and sets up keybindings for the most relevant interactive
