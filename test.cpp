@@ -1,3 +1,43 @@
+// Short comment \[ \alpha < \beta \] ---> \[ \alpha < \beta \]
+/* All supported LaTeX math block types
+
+   Simple
+   ------
+   \( \alpha = \beta \) ---> \( \alpha = \beta \)
+   \[ C = \|p_0-p_1\| = 0 \] ---> \[ C = \|p_0-p_1\| = 0 \]
+
+   Equation/Equation*
+   ------------------
+
+   \begin{equation*}
+     I = \int_a^b f(\mathbf x) dx
+   \end{equation*}
+   --->
+   \begin{equation*}
+     I = \int_a^b f(\mathbf x) dx
+   \end{equation*}
+
+   Align/Align*
+   ------------
+
+   \begin{align*}
+     \alpha &= ( \beta + \eta ) \\
+     \gamma &= [ \delta - \nu ]
+   \end{align*}
+   --->
+   \begin{align*}
+     \alpha &= ( \beta + \eta ) \\
+     \gamma &= [ \delta - \nu ]
+   \end{align*}
+*/
+
+
+
+
+
+
+
+
 /* laic BENCHMARK: 10 simple formulas, takes 0.7..1.0 sec
    Naked equations:
    inline \( \alpha = \beta \) formula

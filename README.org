@@ -4,14 +4,18 @@ functions to render $\LaTeX$ math blocks in code comments.
 It has been tested in C++, Lua and elisp, but should work out of the
 box in any programming mode supported
 
-* Description
-- The interactive function *laic-create-overlay-from-latex-inside-or-forward* creates preview for current/next block
-- The interactive function *laic-create-overlays-from-comment-inside* creates for all blocks in current comment
-- Temporary files are stored in the customizable *laic-output-dir*
-  relative to current file path.
+* Examples
+[[../LatexInComments/laic_cpp_screenshot.png]]
 
-* TODO Examples
-- screen recording with fancy formulas in C++
+* Description
+
+*laic* identifies raw LaTeX blocks in comments, calls LaTeX under the
+hood to produce output images, and renders them as overlays.
+
+- The interactive function *laic-create-overlay-from-latex-inside-or-forward* render current or next LaTeX block as an overlay
+- The interactive function *laic-create-overlays-from-comment-inside* renders all blocks in current comment
+- The interactive function *laic-remove-overlays* removes/hides all overlays
+- Temporary files are stored in the customizable *laic-output-dir* relative to current file path
 
 * Installation
 
@@ -27,9 +31,9 @@ functions.
    (function
     (lambda ()
      (require 'laic)
-     ;; toggle current or next LaTeX block (same keybinding as org-latex-preview)
+     ;; render current or next LaTeX block (same keybinding as org-latex-preview)
      (local-set-key (kbd "C-c C-x C-l") 'laic-create-overlay-from-latex-inside-or-forward)
-     ;; toggle all blocks in current comment
+     ;; render all blocks in current comment
      (local-set-key (kbd "C-c c") 'laic-create-overlays-from-comment-inside)
      ;; disable all laic overlays
      (local-set-key (kbd "C-c r") 'laic-remove-overlays))))

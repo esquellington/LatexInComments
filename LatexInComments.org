@@ -194,17 +194,19 @@ Align*
   text (variables) into LaTeX, ex "alpha" --> "\alpha", subindices, etc
 - This is probably useless, forget it
 * TODO BUGS
-** TODO Foreground color is sometimes wrong
-- Background is always correct though
-- Could it happen on stuff not in screen only? not sure how to repro it
-- If we stick to "in-comments" version, then we could just get the
-  color from comment font lock properties
-** TODO (laic-create-overlays-from-comment-inside) fails if called on last comment block in a file
+** TODO [#A] (laic-create-overlays-from-comment-inside) fails if called on last comment block in a file
 Last LaTeX block in the file need to have at least 1 additional
 comment afterwards for (laic-create-overlays-from-comment-inside) to
 work, not sure why, but likely the func that finds the last point in a
 comment is failing, with "Wrong type argument: number-or-marker-p,
 nil"
+** TODO [#B] Foreground color is sometimes wrong
+- Background is always correct though?
+- Could it happen on stuff not in screen only? not sure how to repro it
+- If we stick to "in-comments" version, then we could just get the
+  color from comment font lock properties
+** TODO [#C] LaTeX text size is hardcoded
+- Should adapt to font size I guess
 * TODO BENCHMARK preview
 \begin{align*}
   \alpha &= \beta \\

@@ -252,6 +252,9 @@ packages may significantly slow preview generation down."
     (delete-file (expand-file-name (concat (laic-OS-dir laic-output-dir) tmpfilename ".aux")))
     (delete-file (expand-file-name (concat (laic-OS-dir laic-output-dir) tmpfilename ".log")))
 
+    ;; TODO delete laic_errors.txt IFF no errors (file is empty)
+    ;;(delete-file (expand-file-name (concat (laic-OS-dir laic-output-dir) "laic_errors.txt")))
+
     ;; Save .png for future deletion, as it's required while overlay is visible
     (push tmpfilename_png laic--list-temp-files)
 
