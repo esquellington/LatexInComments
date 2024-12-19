@@ -223,5 +223,3 @@ nil"
   \text{div} \vec f &= \nabla \cdot \vec f \\
   \text{curl} \vec f &= \nabla \times \vec f \\
 \end{align*}
-* TODO Short Description
-* TODO Example Screencast

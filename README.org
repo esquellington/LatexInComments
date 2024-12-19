@@ -1,1 +1,36 @@
-Emacs package to render LaTeX math blocks in code comments as overlays
+LatexInComments (*laic*) is an Emacs package that provides interactive
+functions to render $\LaTeX$ math blocks in code comments.
+
+It has been tested in C++, Lua and elisp, but should work out of the
+box in any programming mode supported
+
+* Description
+- The interactive function *laic-create-overlay-from-latex-inside-or-forward* creates preview for current/next block
+- The interactive function *laic-create-overlays-from-comment-inside* creates for all blocks in current comment
+- Temporary files are stored in the customizable *laic-output-dir*
+  relative to current file path.
+
+* TODO Examples
+- screen recording with fancy formulas in C++
+
+* Installation
+
+laic can only be installed through direct download, at the
+moment. Just copy *laic.el TODO LINK* to your local lisp folder and
+require it in your init.el
+
+The following elisp block adds a hook to all programming modes that
+loads *laic* and sets up keybindings for the most relevant interactive
+functions.
+#+BEGIN_SRC elisp
+  (add-hook 'prog-mode-hook
+   (function
+    (lambda ()
+     (require 'laic)
+     ;; toggle current or next LaTeX block (same keybinding as org-latex-preview)
+     (local-set-key (kbd "C-c C-x C-l") 'laic-create-overlay-from-latex-inside-or-forward)
+     ;; toggle all blocks in current comment
+     (local-set-key (kbd "C-c c") 'laic-create-overlays-from-comment-inside)
+     ;; disable all laic overlays
+     (local-set-key (kbd "C-c r") 'laic-remove-overlays))))
+#+END_SRC
