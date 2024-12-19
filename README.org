@@ -5,7 +5,8 @@ It has been tested in C++, Lua and elisp, but should work out of the
 box in any programming mode supported
 
 * Examples
-[[../LatexInComments/laic_cpp_screenshot.png]]
+
+#+html: <p align="center"><img src="laic_cpp_screenshot.png" width="500" title"LaTeX in C++ comments"/></p>
 
 * Description
 
