@@ -31,13 +31,6 @@
    \end{align*}
 */
 
-
-
-
-
-
-
-
 /* laic BENCHMARK: 10 simple formulas, takes 0.7..1.0 sec
    Naked equations:
    inline \( \alpha = \beta \) formula

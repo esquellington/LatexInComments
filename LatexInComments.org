@@ -159,11 +159,11 @@ Align*
 - SO, we should delay .png deletion
 * DONE Remove only overlays created by laic
 * TODO Single command/keybinding C-c C-x C-l "DWIM" like org-latex-preview
-- If inside block, preview it
+- If inside block, preview it (TOGGLE)
 - If outside block, preview all blocks
 - SEPARATE command to preview current-or-next?
   \[ a+b =c \]
-- I think
+- Try to use the same logic as org-mode latex preview
 * TODO Toggle overlay on/off with same keys?
 - remove-overlays can be called with BEGIN END, good for toggle, BUT would apply
   to all overlays
@@ -173,6 +173,12 @@ Align*
   otherwise, create all?
 - OR maybe same but if point-in-latex-block, remove it, otherwise, create it
 * TODO WON'T DO
+** DONE LatexInCode > LaterInComments --> NO
+- Instead of just converting comments to latex, consider converting
+  some code text (variables) into LaTeX, ex "alpha" --> "\alpha",
+  subindices, etc
+- This is probably useless, forget it, it's best done using unicode
+  symbols actually, but also a rabbithole I do NOT WANT TO fall into
 ** TODO Better overlays
 *** TODO laic-remove-overlays --> ONLY owned overlays
 **** TODO Save in list OR assign specific property to identify laic-created overlays
@@ -189,10 +195,7 @@ Align*
 ** TODO Syntax-highlight latex blocks in comments
 - Highlight subtly even when no overlay has been created, ideally subtly
   different shade of comment color, I think Org does something similar
-** TODO LatexInCode > LaterInComments
-- Instead of just converting comments to latex, consider converting come code
-  text (variables) into LaTeX, ex "alpha" --> "\alpha", subindices, etc
-- This is probably useless, forget it
+- This would be nice but should be optional
 * TODO BUGS
 ** TODO [#A] (laic-create-overlays-from-comment-inside) fails if called on last comment block in a file
 Last LaTeX block in the file need to have at least 1 additional

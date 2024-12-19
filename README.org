@@ -6,12 +6,12 @@ box in any programming mode supported
 
 * Examples
 
-#+html: <p align="center"><img src="laic_cpp_screenshot.png" width="500" title"LaTeX in C++ comments"/></p>
+#+html: <p align="center"><img src="laic_cpp_screenshot.png" width="50%" title"LaTeX in C++ comments"/></p>
 
 * Description
 
-*laic* identifies raw LaTeX blocks in comments, calls LaTeX under the
-hood to produce output images, and renders them as overlays.
+*laic* identifies math blocks in comments, calls LaTeX under the hood
+to produce output images, and renders them as overlays.
 
 - The interactive function *laic-create-overlay-from-latex-inside-or-forward* render current or next LaTeX block as an overlay
 - The interactive function *laic-create-overlays-from-comment-inside* renders all blocks in current comment
@@ -24,7 +24,7 @@ laic can only be installed through direct download, at the
 moment. Just copy [[file:laic.el]] to your local lisp folder and require
 it in your init.el
 
-The following elisp block adds a hook to all programming modes that
+The following elisp code adds a hook to all programming modes that
 loads *laic* and sets up keybindings for the most relevant interactive
 functions.
 #+BEGIN_SRC elisp
