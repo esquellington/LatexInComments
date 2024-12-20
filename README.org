@@ -14,7 +14,7 @@ the builtin elisp function *comment-beginning*.
 The only requirement is [[https://www.latex-project.org/][LaTeX]] distribution that includes the *latex*
 and *dvipng* commandline utilties
 - Tested with [[https://en.wikipedia.org/wiki/TeX_Live][TeX Live]] on Ubuntu and Windows10.
-- Should work with [[https://miktex.org/][MiKTeX]] and [[https://www.tug.org/mactex/][MacTeX]], but *dvipng* may need to be installed independently and program name customized (see [[Customization]]).
+- Should work with [[https://miktex.org/][MiKTeX]] and [[https://www.tug.org/mactex/][MacTeX]], but *dvipng* may need to be installed independently and program name customized (see [[*Customization][Customization]]).
 
 * Installation
 
@@ -48,9 +48,9 @@ Interactive functions:
 * Customization
 
 - *laic-block-delimiter-pairs*
-- *laic-command-dvipng*: defaults to "dvipng",
-- *laic-extra-packages*: amsmath,amsfonts are included by default, additional packages can be added here
-- *laic-output-dir* Temporary files are stored in the customizable  relative to current file path
+- *laic-command-dvipng*: defaults to "dvipng".
+- *laic-extra-packages*: additional packages can be added here (amsmath and amsfonts are included by default).
+- *laic-output-dir*: temporary files are stored in this folder, relative to current file path.
 
 * TODO Motivation
 
