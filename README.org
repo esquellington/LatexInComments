@@ -1,28 +1,26 @@
-LatexInComments (*laic*) is an Emacs package that provides interactive
-functions to render $\LaTeX$ math blocks in code comments.
+LatexInComments (shortened *laic*) is an Emacs package that renders
+$\LaTeX$ math blocks in code comments. It identifies math blocks
+automatically and calls LaTeX under the hood to produce output images
+and render them as overlays.
 
-It has been tested in C++, Lua and elisp, but should work out of the
-box in any programming mode supported
-
-* Examples
+It has been tested in C++, GLSL, Lua and elisp, but should work out of
+the box in any programming mode that can identify comment blocks with
+the builtin elisp function *comment-beginning*.
 
 #+html: <p align="center"><img src="laic_cpp_screenshot.png" width="50%" title"LaTeX in C++ comments"/></p>
 
-* Description
+* Requirements
 
-*laic* identifies math blocks in comments, calls LaTeX under the hood
-to produce output images, and renders them as overlays.
-
-- The interactive function *laic-create-overlay-from-latex-inside-or-forward* render current or next LaTeX block as an overlay
-- The interactive function *laic-create-overlays-from-comment-inside* renders all blocks in current comment
-- The interactive function *laic-remove-overlays* removes/hides all overlays
-- Temporary files are stored in the customizable *laic-output-dir* relative to current file path
+The only requirement is [[https://www.latex-project.org/][LaTeX]] distribution that includes the *latex*
+and *dvipng* commandline utilties
+- Tested with [[https://en.wikipedia.org/wiki/TeX_Live][TeX Live]] on Ubuntu and Windows10.
+- Should work with [[https://miktex.org/][MiKTeX]] and [[https://www.tug.org/mactex/][MacTeX]], but *dvipng* may need to be installed independently and program name customized (see [[Customization]]).
 
 * Installation
 
-Can only be installed through direct download, at the moment. Just
-copy [[file:laic.el]] to your local lisp folder and require it in your
-init.el
+At the moment *laic* can only be installed through direct
+download. Just copy [[file:laic.el]] to your local lisp folder and require
+it in your init.el
 
 The following elisp code adds a hook to all programming modes that
 loads *laic* and sets up keybindings for the most relevant interactive
@@ -39,3 +37,28 @@ functions.
      ;; disable all laic overlays
      (local-set-key (kbd "C-c r") 'laic-remove-overlays))))
 #+END_SRC
+
+* Usage
+
+Interactive functions:
+- *laic-create-overlay-from-latex-inside-or-forward* renders current or next LaTeX block as an overlay
+- *laic-create-overlays-from-comment-inside* renders all blocks in current comment
+- *laic-remove-overlays* removes/hides all overlays
+
+* Customization
+
+- *laic-block-delimiter-pairs*
+- *laic-command-dvipng*: defaults to "dvipng",
+- *laic-extra-packages*: amsmath,amsfonts are included by default, additional packages can be added here
+- *laic-output-dir* Temporary files are stored in the customizable  relative to current file path
+
+* TODO Motivation
+
+- TODO Why add latex to comments? mostly to avoid half-assed math
+  notation and use fully-featured latex instead. Comments are not
+  code, so there's no reason to limit yourself to explain math using
+  plain ASCII or duplicate computations in comments.
+- *laic* prioritizes speed and simplicity over features:
+  - only requires latex+dvipng (default in TeX Live, no other image processing program required)
+  - optimized for the most frequent use-case: toggling formulas on/off once while reading code/comments
+- The only existing is [[https://github.com/TobiasZawada/texfrag][texfrag]], much more general and ambitious, but also slower and harder to install.

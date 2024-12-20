@@ -158,13 +158,15 @@ Align*
 - BUT if I create overlay and then delete the .png manually, it shows correctly
 - SO, we should delay .png deletion
 * DONE Remove only overlays created by laic
-* TODO Single command/keybinding C-c C-x C-l "DWIM" like org-latex-preview
-- If inside block, preview it (TOGGLE)
-- If outside block, preview all blocks
-- SEPARATE command to preview current-or-next?
-  \[ a+b =c \]
-- Try to use the same logic as org-mode latex preview
-* TODO Toggle overlay on/off with same keys?
+* TODO [#A] Cache + reuse unmodified overlays
+- Regenrating from scratch is slow, especially if there's multiple blocks
+- Toggling on/off req full rebuild now
+- Should be instant, probably latexpreview in org does this
+- Windows is SUPER slow so would benefit massively there
+** TODO Compute hash from each block source code and store it with img in hasmap
+** TODO On generate, check hashmap first, and reuse if exists
+** TODO Clear cache on mode exit or buffer close, but not earlier
+* TODO [#B] Toggle overlay on/off with same keys?
 - remove-overlays can be called with BEGIN END, good for toggle, BUT would apply
   to all overlays
 - So we'd better look for laic--list-overlays in begin/end range and remove
@@ -172,6 +174,12 @@ Align*
 - SO, if point-in-comment, AND there's SOME overlay in the comment, remove all,
   otherwise, create all?
 - OR maybe same but if point-in-latex-block, remove it, otherwise, create it
+* TODO [#B] Single command/keybinding C-c C-x C-l "DWIM" like org-latex-preview
+- If inside block, preview it (TOGGLE)
+- If outside block, preview all blocks
+- SEPARATE command to preview current-or-next?
+  \[ a+b =c \]
+- Try to use the same logic as org-mode latex preview
 * TODO WON'T DO
 ** DONE LatexInCode > LaterInComments --> NO
 - Instead of just converting comments to latex, consider converting
