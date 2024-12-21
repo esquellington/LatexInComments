@@ -11,11 +11,11 @@ the builtin elisp function *comment-beginning*.
 
 * Requirements
 
-The only requirement is [[https://www.latex-project.org/][LaTeX]] distribution that includes the *latex*
-and *dvipng* commandline utilties
+The only requirement is a [[https://www.latex-project.org/][LaTeX]] distribution tha provides the *latex*
+command, and the *dvipng* commandline utility:
 - Tested with [[https://en.wikipedia.org/wiki/TeX_Live][TeX Live]] on Ubuntu and Windows10.
-- Should work with [[https://miktex.org/][MiKTeX]] and [[https://www.tug.org/mactex/][MacTeX]], but *dvipng* may need to be
-  installed independently and customized (see *Customization*).
+- Should work with [[https://miktex.org/][MiKTeX]] and [[https://www.tug.org/mactex/][MacTeX]]
+- *dvipng* may need to be installed independently and customized (see *Customization*)
 
 * Installation
 
@@ -60,6 +60,6 @@ Interactive functions:
   code, so there's no reason to limit yourself to explain math using
   plain ASCII or duplicate computations in comments.
 - *laic* prioritizes speed and simplicity over features:
-  - only requires latex+dvipng (default in TeX Live, no other image processing program required)
+  - only requires latex+dvipng (default in TeX Live, no external dependencies)
   - optimized for the most frequent use-case: toggling formulas on/off once while reading code/comments
 - The only existing is [[https://github.com/TobiasZawada/texfrag][texfrag]], much more general and ambitious, but also slower and harder to install.
