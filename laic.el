@@ -51,10 +51,11 @@
   :group 'laic
   :type 'directory)
 
-(defcustom laic-command-convert "convert"
-  "Command for ImageMagick convert."
-  :group 'laic
-  :type 'file)
+;; TODO Convert is no longer required, use dvipng exclusively, faster and simpler
+;;(defcustom laic-command-convert "convert"
+;;  "Command for ImageMagick convert."
+;;  :group 'laic
+;;  :type 'file)
 
 (defcustom laic-command-dvipng "dvipng"
   "Command for dvipng."
@@ -161,9 +162,9 @@ packages may significantly slow preview generation down."
 ;;--------------------------------
 ;; LaTeX + Image processing
 ;;--------------------------------
-(defun DEPRECATED_laic-convert ( args )
-  "Run convert on ARGS argument string."
-  (shell-command (concat laic-command-convert " " args laic-OS-null-sink) nil nil))
+;;(defun DEPRECATED_laic-convert ( args )
+;;  "Run convert on ARGS argument string."
+;;  (shell-command (concat laic-command-convert " " args laic-OS-null-sink) nil nil))
 
 (defun laic-create-image-from-latex ( code dpi bgcolor fgcolor )
   "Create an image from latex string with given dpi and bg/fg colors and return it."

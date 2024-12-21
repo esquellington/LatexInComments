@@ -14,13 +14,14 @@ the builtin elisp function *comment-beginning*.
 The only requirement is [[https://www.latex-project.org/][LaTeX]] distribution that includes the *latex*
 and *dvipng* commandline utilties
 - Tested with [[https://en.wikipedia.org/wiki/TeX_Live][TeX Live]] on Ubuntu and Windows10.
-- Should work with [[https://miktex.org/][MiKTeX]] and [[https://www.tug.org/mactex/][MacTeX]], but *dvipng* may need to be installed independently and program name customized (see [[*Customization][Customization]]).
+- Should work with [[https://miktex.org/][MiKTeX]] and [[https://www.tug.org/mactex/][MacTeX]], but *dvipng* may need to be
+  installed independently and customized (see *Customization*).
 
 * Installation
 
 At the moment *laic* can only be installed through direct
 download. Just copy [[file:laic.el]] to your local lisp folder and require
-it in your init.el
+it in your startup file.
 
 The following elisp code adds a hook to all programming modes that
 loads *laic* and sets up keybindings for the most relevant interactive
