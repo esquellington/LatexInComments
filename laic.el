@@ -104,8 +104,17 @@ packages may significantly slow preview generation down."
 ;; customized or automatic, see beardbolt.el for defaults that can be
 ;; overriden in customization
 (defun laic-get-image-dpi()
-  "Return screen DPI for LaTeX images."
+  "Return image DPI."
   laic-dpi)
+
+;; Return comment foreground color (defined by theme)
+;; NOTE: Builtin (foreground-color-at-point) returns inconsistent
+;; results, and often returns regular code face color instead of
+;; comment face color, so we just read the :foreground attribute of
+;; the comment face directly, regardless of point
+(defun laic-get-image-foreground-color()
+  "Return image foreground color."
+  (face-attribute 'font-lock-comment-face :foreground))
 
 (defun laic-convert-color-to-dvipng-arg( color )
   "Convert Emacs COLOR string \"#RRGGBB\" to dvipng argument string."
@@ -413,7 +422,7 @@ FGCOLOR and return it."
         (goto-char (nth 0 be)) ;move to begin
         (laic-create-overlay-from-block (nth 0 be) (nth 1 be) ;begin/end
                                         (laic-get-image-dpi) ;dpi
-                                        (background-color-at-point) (foreground-color-at-point)) )))) ;bg/fg colors
+                                        (background-color-at-point) (laic-get-image-foreground-color)) )))) ;bg/fg colors
 
 ;;----------------------------------------------------------------
 ;; Main interactive functionality
@@ -433,7 +442,7 @@ FGCOLOR and return it."
           (t
            (laic-create-overlay-from-block (nth 0 be) (nth 1 be) ;begin/end
                                            (laic-get-image-dpi) ;dpi
-                                           (background-color-at-point) (foreground-color-at-point)) ;bg/fg colors
+                                           (background-color-at-point) (laic-get-image-foreground-color)) ;bg/fg colors
            (goto-char (nth 1 be)) )))) ;move to end
 
 ;;;###autoload
@@ -450,7 +459,7 @@ FGCOLOR and return it."
     (when (and beginpt endpt (< pt endpt)) ;non-nil begin and end + end after current
       (laic-create-overlay-from-block beginpt endpt ;begin/end
                                       (laic-get-image-dpi) ;dpi
-                                      (background-color-at-point) (foreground-color-at-point)) ;bg/fg colors
+                                      (background-color-at-point) (laic-get-image-foreground-color)) ;bg/fg colors
       (goto-char endpt) ))) ;move to end
 
 ;;;###autoload

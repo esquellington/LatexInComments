@@ -193,7 +193,7 @@ comment afterwards for (laic-create-overlays-from-comment-inside) to
 work, not sure why, but likely the func that finds the last point in a
 comment is failing, with "Wrong type argument: number-or-marker-p,
 nil"
-** TODO [#B] Foreground color is sometimes wrong
+** DONE [#B] Foreground color is sometimes wrong
 - Background is always correct though?
 - Could it happen on stuff not in screen only? not sure how to repro it
 - If we stick to "in-comments" version, then we could just get the
