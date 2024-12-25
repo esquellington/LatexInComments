@@ -198,9 +198,9 @@ nil"
 - Could it happen on stuff not in screen only? not sure how to repro it
 - If we stick to "in-comments" version, then we could just get the
   color from comment font lock properties
-** TODO [#C] LaTeX text size is hardcoded
+** DONE [#C] LaTeX text size is hardcoded --> just customize it
 - Should adapt to font size at point I guess
-*** TODO Could adapt when zoom in/out
+*** DONE Could customize DPI instead, because font size may be too small for LaTeX formulas anyway
 * TODO BENCHMARK preview
 \begin{align*}
   \alpha &= \beta \\

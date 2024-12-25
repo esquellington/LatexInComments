@@ -51,12 +51,6 @@
   :group 'laic
   :type 'directory)
 
-;; TODO Convert is no longer required, use dvipng exclusively, faster and simpler
-;;(defcustom laic-command-convert "convert"
-;;  "Command for ImageMagick convert."
-;;  :group 'laic
-;;  :type 'file)
-
 (defcustom laic-command-dvipng "dvipng"
   "Command for dvipng."
   :group 'laic
@@ -79,6 +73,11 @@ packages may significantly slow preview generation down."
   :group 'laic
   :type 'string)
 
+(defcustom laic-dpi 200
+  "Custom DPI for LaTeX images, independent of font size."
+  :group 'laic
+  :type 'number)
+
 ;;------------------------------------------------------------------------------------------------
 ;; Internal implementation
 ;; IMPORTANT: No function moves the point (all use save-excursion when required)
@@ -93,20 +92,20 @@ packages may significantly slow preview generation down."
     (comment-normalize-vars)
     (not (eq (comment-beginning) nil))))
 
-;; This would be the proper way, but requires finding physical screen size in
-;; inches, on the XPS13 it's 170dpi... for now we just return 200dpi
-;;  (/ (sqrt (+ (* (display-pixel-width) (display-pixel-width))
-;;              (* (display-pixel-height) (display-pixel-height))))
+;; Compute DPI for LaTeX images.
+;;
+;; This would be the proper way, but requires finding physical screen
+;; size in inches, on the XPS13 it's 170dpi
+;; (/ (sqrt (+ (* (display-pixel-width) (display-pixel-width))
+;;             (* (display-pixel-height) (display-pixel-height))))
 ;;     13.0)) ;TODO (physical-screen-diagonal-size-in-inches)))
-(defun laic-get-dpi()
-  "Return screen DPI."
-  200)
-
-;; From org--get-display-dpi(), but yields tiny formulas!
-;; (defun laic-get-dpi ()
-;;   "Return screen DPI."
-;;   (round (/ (display-pixel-height)
-;;             (/ (display-mm-height) 25.4))))
+;;
+;; TODO For now we just customize it explicitly, could select
+;; customized or automatic, see beardbolt.el for defaults that can be
+;; overriden in customization
+(defun laic-get-image-dpi()
+  "Return screen DPI for LaTeX images."
+  laic-dpi)
 
 (defun laic-convert-color-to-dvipng-arg( color )
   "Convert Emacs COLOR string \"#RRGGBB\" to dvipng argument string."
@@ -413,7 +412,7 @@ FGCOLOR and return it."
         (setq be (pop lb))
         (goto-char (nth 0 be)) ;move to begin
         (laic-create-overlay-from-block (nth 0 be) (nth 1 be) ;begin/end
-                                        (laic-get-dpi) ;dpi
+                                        (laic-get-image-dpi) ;dpi
                                         (background-color-at-point) (foreground-color-at-point)) )))) ;bg/fg colors
 
 ;;----------------------------------------------------------------
@@ -433,7 +432,7 @@ FGCOLOR and return it."
            (message "laic-create-overlay-from-latex-forward() no LaTeX block found!"))
           (t
            (laic-create-overlay-from-block (nth 0 be) (nth 1 be) ;begin/end
-                                           (laic-get-dpi) ;dpi
+                                           (laic-get-image-dpi) ;dpi
                                            (background-color-at-point) (foreground-color-at-point)) ;bg/fg colors
            (goto-char (nth 1 be)) )))) ;move to end
 
@@ -450,7 +449,7 @@ FGCOLOR and return it."
     ;; Create if found
     (when (and beginpt endpt (< pt endpt)) ;non-nil begin and end + end after current
       (laic-create-overlay-from-block beginpt endpt ;begin/end
-                                      (laic-get-dpi) ;dpi
+                                      (laic-get-image-dpi) ;dpi
                                       (background-color-at-point) (foreground-color-at-point)) ;bg/fg colors
       (goto-char endpt) ))) ;move to end
 
