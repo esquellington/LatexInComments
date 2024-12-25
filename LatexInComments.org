@@ -180,7 +180,46 @@ Align*
 - SEPARATE command to preview current-or-next?
   \[ a+b =c \]
 - Try to use the same logic as org-mode latex preview
-* TODO WON'T DO
+* TODO [#A] Laic as minor mode
+- verify ltex and dvipng commands work as configured, otherwise report
+  useful message/suggestions
+- define minor mode keymap instead of individual keybindings
+- local list of overlays and toggle only these
+- optionally enable laic-view that automatically gens all overlays in view when scrilling around the buffer
+* TODO BUGS
+** TODO [#A] (laic-create-overlays-from-comment-inside) fails if called on last comment block in a file
+Last LaTeX block in the file need to have at least 1 additional
+comment afterwards for (laic-create-overlays-from-comment-inside) to
+work, not sure why, but likely the func that finds the last point in a
+comment is failing, with "Wrong type argument: number-or-marker-p,
+nil"
+** TODO [#B] Foreground color is sometimes wrong
+- Background is always correct though?
+- Could it happen on stuff not in screen only? not sure how to repro it
+- If we stick to "in-comments" version, then we could just get the
+  color from comment font lock properties
+** TODO [#C] LaTeX text size is hardcoded
+- Should adapt to font size at point I guess
+*** TODO Could adapt when zoom in/out
+* TODO BENCHMARK preview
+\begin{align*}
+  \alpha &= \beta \\
+  C &= \|p_0-p_1\| = 0 \\
+  I &= \int_a^b f(\mathbf x) dx \\
+  \alpha &= ( \beta + \eta ) \\
+  \gamma &= [ \delta - \nu ] \\
+  M &= \begin{bmatrix}
+     M_{xx} & M_{xy} & M_{xz} \\
+     M_{yx} & M_{yy} & M_{yz} \\
+     M_{zx} & M_{zy} & M_{zz} \\
+     \end{bmatrix} \\
+  \nabla &= (\frac{\partial}{\partial x},\frac{\partial}{\partial y},\frac{\partial}{\partial z}) \\
+  \nabla f &=(\frac{\partial f}{\partial x},\frac{\partial f}{\partial y},\frac{\partial f}{\partial z}) \\
+  \Delta f &= \nabla^2 f = \nabla \cdot \nabla f \\
+  \text{div} \vec f &= \nabla \cdot \vec f \\
+  \text{curl} \vec f &= \nabla \times \vec f \\
+\end{align*}
+* TODO DISCARDED extensions
 ** DONE LatexInCode > LaterInComments --> NO
 - Instead of just converting comments to latex, consider converting
   some code text (variables) into LaTeX, ex "alpha" --> "\alpha",
@@ -204,35 +243,3 @@ Align*
 - Highlight subtly even when no overlay has been created, ideally subtly
   different shade of comment color, I think Org does something similar
 - This would be nice but should be optional
-* TODO BUGS
-** TODO [#A] (laic-create-overlays-from-comment-inside) fails if called on last comment block in a file
-Last LaTeX block in the file need to have at least 1 additional
-comment afterwards for (laic-create-overlays-from-comment-inside) to
-work, not sure why, but likely the func that finds the last point in a
-comment is failing, with "Wrong type argument: number-or-marker-p,
-nil"
-** TODO [#B] Foreground color is sometimes wrong
-- Background is always correct though?
-- Could it happen on stuff not in screen only? not sure how to repro it
-- If we stick to "in-comments" version, then we could just get the
-  color from comment font lock properties
-** TODO [#C] LaTeX text size is hardcoded
-- Should adapt to font size I guess
-* TODO BENCHMARK preview
-\begin{align*}
-  \alpha &= \beta \\
-  C &= \|p_0-p_1\| = 0 \\
-  I &= \int_a^b f(\mathbf x) dx \\
-  \alpha &= ( \beta + \eta ) \\
-  \gamma &= [ \delta - \nu ] \\
-  M &= \begin{bmatrix}
-     M_{xx} & M_{xy} & M_{xz} \\
-     M_{yx} & M_{yy} & M_{yz} \\
-     M_{zx} & M_{zy} & M_{zz} \\
-     \end{bmatrix} \\
-  \nabla &= (\frac{\partial}{\partial x},\frac{\partial}{\partial y},\frac{\partial}{\partial z}) \\
-  \nabla f &=(\frac{\partial f}{\partial x},\frac{\partial f}{\partial y},\frac{\partial f}{\partial z}) \\
-  \Delta f &= \nabla^2 f = \nabla \cdot \nabla f \\
-  \text{div} \vec f &= \nabla \cdot \vec f \\
-  \text{curl} \vec f &= \nabla \times \vec f \\
-\end{align*}

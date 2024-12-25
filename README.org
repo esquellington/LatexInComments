@@ -54,12 +54,13 @@ Interactive functions:
 - *laic-output-dir*: temporary files are stored in this folder, relative to current file path.
 
 * TODO Motivation
-
 - TODO Why add latex to comments? mostly to avoid half-assed math
   notation and use fully-featured latex instead. Comments are not
   code, so there's no reason to limit yourself to explain math using
   plain ASCII or duplicate computations in comments.
 - *laic* prioritizes speed and simplicity over features:
-  - only requires latex+dvipng (default in TeX Live, no external dependencies)
+  - only requires latex + dvipng
   - optimized for the most frequent use-case: toggling formulas on/off once while reading code/comments
-- The only existing is [[https://github.com/TobiasZawada/texfrag][texfrag]], much more general and ambitious, but also slower and harder to install.
+- The only existing is [[https://github.com/TobiasZawada/texfrag][texfrag]], much more general and ambitious, but
+  also slower and harder to install.
+- org-latex-preview only works in org-mode buffers
