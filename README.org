@@ -54,13 +54,31 @@ Interactive functions:
 - *laic-output-dir*: temporary files are stored in this folder, relative to current file path.
 
 * TODO Motivation
-- TODO Why add latex to comments? mostly to avoid half-assed math
-  notation and use fully-featured latex instead. Comments are not
-  code, so there's no reason to limit yourself to explain math using
-  plain ASCII or duplicate computations in comments.
-- *laic* prioritizes speed and simplicity over features:
-  - only requires latex + dvipng
+- /Why bother adding LaTeX-formatted math in code comments?/
+
+  When writing math-heavy code it is often necessary to cite, show and
+  explain complex formulas. The most popular options seem to be:
+  - Explaining math in plain text, often very verbosely.
+  - Using ad-hoc textual math, often ends up looking almost like
+    code, just formatted differently.
+  - Citing formulas in source papers/books, maybe as hyperlinks,
+    without showing them explicitly, which requires an extra step to
+    understand the code.
+
+  Comments are not code, so in my opinion there's no reason to limit
+  their expressiveness to plain text. LaTeX is a widely known language
+  that is reasonably easy to write and read directly in comments, and
+  can be automatically parsed to display math formulas as images
+  beside code itself. It can result in increased comment verbosity,
+  but LaTeX blocks are very easily identified.
+
+- *laic* prioritizes simplicity and speed over features:
+  - minimal dependencies: just latex + dvipng
+  - easy setup: should work out of the box without customization
   - optimized for the most frequent use-case: toggling formulas on/off once while reading code/comments
-- The only existing is [[https://github.com/TobiasZawada/texfrag][texfrag]], much more general and ambitious, but
-  also slower and harder to install.
-- org-latex-preview only works in org-mode buffers
+- The only existing alternative I know of is [[https://github.com/TobiasZawada/texfrag][texfrag]], much more general and
+  ambitious, but also slower and harder to install.
+- A potential alternative would be using org-latex-preview, but only
+  works in org-mode buffers by default, and requires additional latex
+  packages not present in the basic texlive package
+  (texlive-latex-extra)

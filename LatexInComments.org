@@ -186,7 +186,7 @@ Align*
 - define minor mode keymap instead of individual keybindings
 - local list of overlays and toggle only these
 - optionally enable laic-view that automatically gens all overlays in view when scrilling around the buffer
-* TODO BUGS
+* TODO [#A] BUGS
 ** TODO [#A] (laic-create-overlays-from-comment-inside) fails if called on last comment block in a file
 Last LaTeX block in the file need to have at least 1 additional
 comment afterwards for (laic-create-overlays-from-comment-inside) to
