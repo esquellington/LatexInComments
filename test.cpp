@@ -84,7 +84,15 @@
    \end{align*}
 */
 
-//BUG Last LaTeX block in the file need to have at least 1 additional \[\alpha\]
-//comment afterwards for (laic-create-overlays-from-comment-inside) to
-//work, not sure why, but likely the func that finds the last point in
-//a comment is failing, with "Wrong type argument: number-or-marker-p, nil"
+//BUG Last LaTeX block in the file need to have at least 1 additional
+//\[\alpha\] comment afterwards for
+//(laic-create-overlays-from-comment-inside) to work, not sure why,
+//but likely the func that finds the last point in a comment is
+//failing, with "Wrong type argument: number-or-marker-p, nil". See
+//block below, if I delete the // then C-c C-c fails in /**/ block
+
+/*
+ \[\alpha\]
+*/
+
+//

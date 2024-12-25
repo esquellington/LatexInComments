@@ -7,6 +7,7 @@ It has been tested in C++, GLSL, Lua and elisp, but should work out of
 the box in any programming mode that can identify comment blocks with
 the builtin elisp function *comment-beginning*.
 
+*TODO* add an actual example, not a random formula
 #+html: <p align="center"><img src="laic_cpp_screenshot.png" width="50%" title"LaTeX in C++ comments"/></p>
 
 * Requirements
@@ -78,12 +79,14 @@ Interactive functions:
   - optimized for the most frequent use-case: toggling formulas on/off
     once while reading code/comments
 
+- The main inspiration is org-latex-preview, that only works in
+  org-mode buffers by default, requires additional latex packages, and
+  is slower on the 1st invokation.
+
 ** Alternatives
-- The only direct alternative I know of is [[https://github.com/TobiasZawada/texfrag][texfrag]], much more general
-  and ambitious, but also slower and harder to install.
-- A potential alternative would be using org-latex-preview, but only
-  works in org-mode buffers by default, and requires additional latex
-  packages not present in the basic texlive package
-  (texlive-latex-extra)
-- Doxygen includes its own math notation that represents a subset of
-  what LaTeX can do.
+*TODO* not sure this is all accurate, review, don't say anything that
+ cannot be proved
+- [[https://github.com/TobiasZawada/texfrag][texfrag]] is the only direct alternative I know of, more general and
+  ambitious than *laic*, but also slower and harder to install.
+- [[https://www.doxygen.nl/manual/formulas.html][Doxygen]] includes its own math notation that only covers a subset of
+  what LaTeX math environments can do.
