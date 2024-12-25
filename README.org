@@ -68,17 +68,22 @@ Interactive functions:
   Comments are not code, so in my opinion there's no reason to limit
   their expressiveness to plain text. LaTeX is a widely known language
   that is reasonably easy to write and read directly in comments, and
-  can be automatically parsed to display math formulas as images
-  beside code itself. It can result in increased comment verbosity,
-  but LaTeX blocks are very easily identified.
+  can be automatically parsed to display math as images beside code
+  itself. It can result in increased comment verbosity, but LaTeX
+  blocks are very easily identified.
 
 - *laic* prioritizes simplicity and speed over features:
   - minimal dependencies: just latex + dvipng
   - easy setup: should work out of the box without customization
-  - optimized for the most frequent use-case: toggling formulas on/off once while reading code/comments
-- The only existing alternative I know of is [[https://github.com/TobiasZawada/texfrag][texfrag]], much more general and
-  ambitious, but also slower and harder to install.
+  - optimized for the most frequent use-case: toggling formulas on/off
+    once while reading code/comments
+
+** Alternatives
+- The only direct alternative I know of is [[https://github.com/TobiasZawada/texfrag][texfrag]], much more general
+  and ambitious, but also slower and harder to install.
 - A potential alternative would be using org-latex-preview, but only
   works in org-mode buffers by default, and requires additional latex
   packages not present in the basic texlive package
   (texlive-latex-extra)
+- Doxygen includes its own math notation that represents a subset of
+  what LaTeX can do.
