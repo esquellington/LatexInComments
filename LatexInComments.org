@@ -186,21 +186,6 @@ Align*
 - define minor mode keymap instead of individual keybindings
 - local list of overlays and toggle only these
 - optionally enable laic-view that automatically gens all overlays in view when scrilling around the buffer
-* TODO [#A] BUGS
-** TODO [#A] (laic-create-overlays-from-comment-inside) fails if called on last comment block in a file
-Last LaTeX block in the file need to have at least 1 additional
-comment afterwards for (laic-create-overlays-from-comment-inside) to
-work, not sure why, but likely the func that finds the last point in a
-comment is failing, with "Wrong type argument: number-or-marker-p,
-nil"
-** DONE [#B] Foreground color is sometimes wrong
-- Background is always correct though?
-- Could it happen on stuff not in screen only? not sure how to repro it
-- If we stick to "in-comments" version, then we could just get the
-  color from comment font lock properties
-** DONE [#C] LaTeX text size is hardcoded --> just customize it
-- Should adapt to font size at point I guess
-*** DONE Could customize DPI instead, because font size may be too small for LaTeX formulas anyway
 * TODO BENCHMARK preview
 \begin{align*}
   \alpha &= \beta \\
@@ -243,3 +228,27 @@ nil"
 - Highlight subtly even when no overlay has been created, ideally subtly
   different shade of comment color, I think Org does something similar
 - This would be nice but should be optional
+* DONE [#A] BUGS
+** DONE [#A] (laic-create-overlays-from-comment-inside) fails if called on last comment block in a file
+Last LaTeX block in the file need to have at least 1 additional
+comment afterwards for (laic-create-overlays-from-comment-inside) to
+work, not sure why, but likely the func that finds the last point in a
+comment is failing, with "Wrong type argument: number-or-marker-p,
+nil"
+- The problem is that we call comment-search-forward and we do not
+  search for comment END, we search for next comment START!? so if
+  there's no other comment, we get (begin nil) and try to compare it
+  with a number
+*** DONE we need a command-ending func that returns point at the end of the current comment
+- If we know we're inside a comment, we could jump to mext line and
+  ask again, until we're no longer inside a comment, and that's the
+  comment end
+- Fixed with custom laic-find-comment-or-buffer-end
+** DONE [#B] Foreground color is sometimes wrong
+- Background is always correct though?
+- Could it happen on stuff not in screen only? not sure how to repro it
+- If we stick to "in-comments" version, then we could just get the
+  color from comment font lock properties
+** DONE [#C] LaTeX text size is hardcoded --> just customize it
+- Should adapt to font size at point I guess
+*** DONE Could customize DPI instead, because font size may be too small for LaTeX formulas anyway

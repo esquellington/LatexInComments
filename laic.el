@@ -519,6 +519,14 @@ otherwise find next latex block, and move point to end."
   (interactive)
   (laic-create-overlays-from-blocks (laic-gather-blocks-in-comments (region-beginning) (region-end))))
 
+(defun laic-find-comment-or-buffer-end()
+  "Return point end of comment or end of buffer."
+  (interactive)
+  (save-excursion ;avoid changing point
+    (while (and (< (point) (point-max)) (laic-is-point-in-comment-p))
+      (forward-line))
+    (point)))
+
 ;;;###autoload
 (defun laic-create-overlays-from-comment-inside()
   "Create image overlays for all blocks in the current comment around point."
@@ -529,10 +537,13 @@ otherwise find next latex block, and move point to end."
                (save-excursion ;avoid changing point
                  (let (bc ec)
                    (setq bc (comment-search-backward nil t)) ;comment begin, moves point
-                   (setq ec (comment-search-forward nil t)) ;comment end, from previously moved point at begin
-                   ;;DEBUG (message "be = %d %d = %s" bc ec (buffer-substring-no-properties bc ec))
-                   (laic-create-overlays-from-blocks (laic-gather-blocks bc ec))))))
-;;             ))
+                   (setq ec (laic-find-comment-or-buffer-end)) ;comment end, from previously moved point at begin
+                   (cond ((and bc ec)
+                          ;;(message "be = %d" bc)
+                          ;;(message "ec = %d" ec)
+                          (laic-create-overlays-from-blocks (laic-gather-blocks bc ec)))
+                         (t
+                          (error "ERROR: laic-create-overlays-from-blocks could not find comment begin/end")))))))
 
 ;;--------------------------------
 ;; Package setup
