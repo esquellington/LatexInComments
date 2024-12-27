@@ -1,13 +1,12 @@
 LatexInComments (shortened *laic*) is an Emacs package that renders
 $\LaTeX$ math blocks in code comments. It identifies math blocks
-automatically and calls LaTeX under the hood to produce output images
-and render them as overlays.
+automatically and calls LaTeX under the hood to render them as images
+and display them as overlays.
 
 It has been tested in C++, GLSL, Lua and elisp, but should work out of
 the box in any programming mode that can identify comment blocks with
 the builtin elisp function *comment-beginning*.
 
-*TODO* add an actual example, not a random formula
 #+html: <p align="center"><img src="laic_cpp_screenshot.png" width="50%" title"LaTeX in C++ comments"/></p>
 
 * Requirements
@@ -67,11 +66,11 @@ Interactive functions:
     understand the code.
 
   Comments are not code, so in my opinion there's no reason to limit
-  their expressiveness to plain text. LaTeX is a widely known language
-  that is reasonably easy to write and read directly in comments, and
-  can be automatically parsed to display math as images beside code
-  itself. It can result in increased comment verbosity, but LaTeX
-  blocks are very easily identified.
+  their expressiveness to plain text. LaTeX is reasonably easy to
+  write and read directly in comments, and can be automatically parsed
+  to display math as images beside code itself. It can result in
+  increased comment verbosity, but LaTeX blocks are very easily
+  identified.
 
 - *laic* prioritizes simplicity and speed over features:
   - minimal dependencies: just latex + dvipng

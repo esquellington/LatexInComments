@@ -89,3 +89,46 @@
 /*
  \[\alpha\]
 */
+
+/* Split vector \[v\] into normal \[v_n\] and tangential \[v_t\] components wrt a normal unit vector \[\hat n\]
+
+   \[ v = v_n + v_t \]
+   \[ v_n = \hat n \hat n^T v \]
+   \[ v_t = (I - \hat n \hat n^T) v = v - v_n \]
+*/
+
+/* Compute average and variance for a list of floats in a single pass
+
+   Average
+   \[ \bar X = \frac{ \sum_i x_i}{N} \]
+
+   Variance is the expected squared deviation from the average
+   \[ \sigma^2 &= \frac{\sum_i (x_i-\bar X)^2}{N} \]
+
+   We can reformulate the variance expression to allow computing it in
+   a single pass, instead of a first pass to compute the average and a
+   second pass for the variance using the average:
+   \begin{align*}
+    \sigma^2 &= \frac{\sum_i x_i^2 - 2 x_i \bar X + \bar X^2}{N} \\
+             &= \frac{\sum_i x_i^2}{N} - \frac{\sum_i 2 x_i \bar X}{N} + \frac{\sum_i \bar X^2}{N} \\
+             &= \frac{\sum_i x_i^2}{N} - 2\bar X\frac{\sum_i x_i}{N} + \frac{\sum_i \bar X^2}{N} \\
+             &= \frac{\sum_i x_i^2}{N} - 2\bar X^2 + N\frac{\bar X^2}{N} \\
+             &= \frac{\sum_i x_i^2}{N} - \bar X^2
+   \end{align*}
+*/
+#include <list>
+void ComputeAverageAndVariance( const std::list<float>& values,
+                                float& average, float& variance )
+{
+    int N = 0;
+    float sum_x = 0.0f;
+    float sum_x2 = 0.0f;
+    for( auto v : values )
+    {
+        N++;
+        sum_x += v;
+        sum_x2 += v * v;
+    }
+    average = sum_x / N;
+    variance = sum_x2 / N - average*average;
+}
