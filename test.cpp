@@ -97,6 +97,7 @@
    \[ v_t = (I - \hat n \hat n^T) v = v - v_n \]
 */
 
+#include <list>
 /* Compute average and variance for a list of floats in a single pass
 
    Average
@@ -116,7 +117,6 @@
              &= \frac{\sum_i x_i^2}{N} - \bar X^2
    \end{align*}
 */
-#include <list>
 void ComputeAverageAndVariance( const std::list<float>& values,
                                 float& average, float& variance )
 {
