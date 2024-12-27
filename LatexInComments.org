@@ -228,6 +228,12 @@ Align*
 - Highlight subtly even when no overlay has been created, ideally subtly
   different shade of comment color, I think Org does something similar
 - This would be nice but should be optional
+* TODO Generate video screencast in GIF
+Record using Ubuntu screen recorder --> WEBM format
+WEBM and <video> tag not directly supported? --> convert to GIV
+
+ffmpeg -y -i input.webm -vf palettegen palette.png
+ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.gif
 * DONE [#A] BUGS
 ** DONE [#A] (laic-create-overlays-from-comment-inside) fails if called on last comment block in a file
 Last LaTeX block in the file need to have at least 1 additional

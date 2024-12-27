@@ -7,19 +7,7 @@ It has been tested in C++, GLSL, Lua and elisp, but should work out of
 the box in any programming mode that can identify comment blocks with
 the builtin elisp function *comment-beginning*.
 
-#+html: <p align="center"> <img src="laic_cpp_screenshot.png" width="50%" title"LaTeX in C++ comments"/> </p>
-
-#+html: <p align="center"> <video width="75%" autoplay muted loop> <source src="laic_cpp_example.webm" type"video/webm"/> VIDEO??? </video> </p>
-
-#+BEGIN_EXPORT html
-<p align="center">
- <video width="75%" autoplay muted loop>
-  <source src="laic_cpp_example.webm" type"video/webm"/>
-  <img src="laic_cpp_screenshot.png"/>
-  VIDEO???
- </video>
-</p>
-#+END_EXPORT
+#+html: <p align="center"> <img src="laic_cpp_example.giv" width="75%" title"LaTeX in C++ comments"/> </p>
 
 * Requirements
 
