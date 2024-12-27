@@ -3,16 +3,16 @@ $\LaTeX$ math blocks in code comments. It identifies math blocks
 automatically and calls LaTeX under the hood to render them as images
 and display them as overlays.
 
-It has been tested in C++, GLSL, Lua and elisp, but should work out of
-the box in any programming mode that can identify comment blocks with
-the builtin elisp function *comment-beginning*.
-
 #+html: <p align="center"> <img src="laic_cpp_example.gif" width="75%" title"LaTeX in C++ comments"/> </p>
 
 * Requirements
 
-The only requirement is a [[https://www.latex-project.org/][LaTeX]] distribution tha provides the *latex*
-command, and the *dvipng* commandline utility:
+Should work out of the box in any Emacs programming mode that can
+identify comment blocks with the builtin elisp function
+*comment-beginning*, and has been tested in C++, GLSL, Lua and elisp.
+
+The only external requirement is a [[https://www.latex-project.org/][LaTeX]] distribution tha provides the
+*latex* command, and the *dvipng* commandline utility:
 - Tested with [[https://en.wikipedia.org/wiki/TeX_Live][TeX Live]] on Ubuntu and Windows10.
 - Should work with [[https://miktex.org/][MiKTeX]] and [[https://www.tug.org/mactex/][MacTeX]]
 - *dvipng* may need to be installed independently and customized (see *Customization*)
@@ -54,38 +54,39 @@ Interactive functions:
 - *laic-output-dir*: temporary files are stored in this folder, relative to current file path.
 
 * TODO Motivation
-- /Why bother adding LaTeX-formatted math in code comments?/
+When writing math-heavy code it is often necessary to cite, show and
+explain complex formulas. The most common options seem to be:
+- Explaining math in plain text, often very verbosely.
+- Using ad-hoc textual math, often ends up looking almost like
+  code, just formatted differently.
+- Citing formulas in source papers/books, maybe as hyperlinks,
+  without showing them explicitly, which requires an extra step to
+  understand the code.
 
-  When writing math-heavy code it is often necessary to cite, show and
-  explain complex formulas. The most popular options seem to be:
-  - Explaining math in plain text, often very verbosely.
-  - Using ad-hoc textual math, often ends up looking almost like
-    code, just formatted differently.
-  - Citing formulas in source papers/books, maybe as hyperlinks,
-    without showing them explicitly, which requires an extra step to
-    understand the code.
+Comments are not code, so in my opinion there's no reason to limit
+their expressiveness to plain text. LaTeX is reasonably easy to
+write and read directly in comments, and can be automatically parsed
+to display math as images beside code itself.
 
-  Comments are not code, so in my opinion there's no reason to limit
-  their expressiveness to plain text. LaTeX is reasonably easy to
-  write and read directly in comments, and can be automatically parsed
-  to display math as images beside code itself. It can result in
-  increased comment verbosity, but LaTeX blocks are very easily
-  identified.
+** Design
 
-- *laic* prioritizes simplicity and speed over features:
-  - minimal dependencies: just latex + dvipng
-  - easy setup: should work out of the box without customization
-  - optimized for the most frequent use-case: toggling formulas on/off
-    once while reading code/comments
+The main inspiration is org-latex-preview, that allows displaying
+inline math in org-mode buffers. only works in org-mode buffers by
+default, requires additional latex packages, and is slower on the 1st
+invocation.
 
-- The main inspiration is org-latex-preview, that only works in
-  org-mode buffers by default, requires additional latex packages, and
-  is slower on the 1st invokation.
+*laic* prioritizes simplicity and speed over features:
+- minimal dependencies: just latex + dvipng.
+- easy setup: should work out of the box without customization.
+- optimized for the most frequent use-case: toggling formulas on/off
+  once while reading code/comments.
 
 ** Alternatives
 *TODO* not sure this is all accurate, review, don't say anything that
  cannot be proved
 - [[https://github.com/TobiasZawada/texfrag][texfrag]] is the only direct alternative I know of, more general and
   ambitious than *laic*, but also slower and harder to install.
-- [[https://www.doxygen.nl/manual/formulas.html][Doxygen]] includes its own math notation that only covers a subset of
-  what LaTeX math environments can do.
+- [[https://www.doxygen.nl/manual/formulas.html][Doxygen]] supports LaTex math wrapped in its custom "formula" tags,
+  but only supports a handful of languages, imposes additional
+  requirements on comment formatting, and involves a slow HTML
+  generation step.
