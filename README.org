@@ -42,9 +42,9 @@ functions.
 * Usage
 
 Interactive functions:
-- *laic-create-overlay-from-latex-inside-or-forward* renders current or next LaTeX block as an overlay
-- *laic-create-overlays-from-comment-inside* renders all blocks in current comment
-- *laic-remove-overlays* removes/hides all overlays
+- *laic-create-overlay-from-latex-inside-or-forward* renders current or next LaTeX block as an overlay.
+- *laic-create-overlays-from-comment-inside* renders all blocks in current comment.
+- *laic-remove-overlays* removes/hides all overlays.
 
 * Customization
 

@@ -20,6 +20,11 @@ file:laic.el
 - See http://mazack.org/unix/tex2png.php, also useful
 - This explains how to create overlays and image tooltips
   http://kitchingroup.cheme.cmu.edu/blog/2016/03/21/Displaying-image-overlays-on-image-filenames-in-Emacs/
+- VSCode has extensions to render math in comments, but they're all
+  very ugly and require additional tags in comments
+  - https://marketplace.visualstudio.com/items?itemName=Remisa.mathover
+  - https://marketplace.visualstudio.com/items?itemName=vs-publisher-1305558.VsTeXCommentsExtension
+  - https://marketplace.visualstudio.com/items?itemName=howcasperwhat.comment-formula
 * DONE Requirements
    EASY LaTeX math preview in C/C++ comments
 ** Should work like texfrag-region/document, but for whole comments/functions/files
