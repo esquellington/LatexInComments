@@ -169,7 +169,7 @@ WEBM and <video> tag not directly supported? --> convert to GIV
 
 ffmpeg -y -i input.webm -vf palettegen palette.png
 ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.gif
-* TODO [#A] Laic insideornext no comprova inside comment!
+* DONE [#A] Laic insideornext no comprova inside comment!
 - Per tant agafa block next encara que sigui molt mes avall!
 - Seria millor comprovar explicitament que es inside un comentari,
   encara que no sigui inside un block, si no es molt confus, i pot
@@ -180,7 +180,7 @@ ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.g
   comentari es concerteixi
 - Rename to Insideornextinthisline?
 - De fet aixo tb seria aplicable a la func inside, que es podria relaxar
-** TODO New logic
+** DONE New logic
 - Search current or next block
 - Verify it’s inside comment
 - Verify it’s insice screen

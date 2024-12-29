@@ -31,20 +31,20 @@ functions.
    (function
     (lambda ()
      (require 'laic)
-     ;; render current or next LaTeX block (same keybinding as org-latex-preview)
+     ;; Create overlay for current or next visible latex block in a comment.
      (local-set-key (kbd "C-c C-x C-l") 'laic-create-overlay-from-latex-inside-or-forward)
-     ;; render all blocks in current comment
-     (local-set-key (kbd "C-c c") 'laic-create-overlays-from-comment-inside)
-     ;; disable all laic overlays
+     ;; Create overlays for all latex blocks in the current comment.
+     (local-set-key (kbd "C-c c") 'laic-create-overlays-from-comment-inside-or-forward)
+     ;; Remove all laic overlays
      (local-set-key (kbd "C-c r") 'laic-remove-overlays))))
 #+END_SRC
 
 * Usage
 
 Interactive functions:
-- *laic-create-overlay-from-latex-inside-or-forward* renders current or next LaTeX block as an overlay.
-- *laic-create-overlays-from-comment-inside* renders all blocks in current comment.
-- *laic-remove-overlays* removes/hides all overlays.
+- *laic-create-overlay-from-comment-inside-or-forward*: Create overlay for current or next visible latex block in a comment.
+- *laic-create-overlays-from-comment-inside-or-forward*: Create overlays for all latex blocks in the current comment.
+- *laic-remove-overlays*: Remove all laic overlays.
 
 * Customization
 

@@ -129,6 +129,6 @@ void ComputeAverageAndVariance( const std::list<float>& values,
         sum_x += v;
         sum_x2 += v * v;
     }
-    average = sum_x / N;
-    variance = sum_x2 / N - average*average;
+    average = sum_x / N; //\[\bar X\]
+    variance = sum_x2 / N - average*average; //\[\sigma^2\]
 }

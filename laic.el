@@ -11,15 +11,16 @@
 ;;; Commentary:
 ;;
 ;; Functionality:
-;; - The interactive function `laic-create-overlay-from-latex-inside-or-forward' creates preview for current/next block
-;; - The interactive function `laic-create-overlays-from-comment-inside' creates for all blocks in current comment
+;; - `laic-create-overlay-from-comment-inside-or-forward' Create overlay for current or next visible latex block in a comment.
+;; - `laic-create-overlays-from-comment-inside-or-forward' Create overlays for all latex blocks in the current comment.
+;; - `laic-remove-overlays' Remove all laic overlays and delete all temporary files.
 ;; - Temporary files are stored in the customizable `laic-output-dir' relative to current file path.
 ;;
 ;; Installation:
 ;; - Add (require 'laic) to your (programming) mode hook.
 ;; - Optionally add a local keybinding (suggested "C-c C-x C-l") to call
-;;   functions `laic-create-overlay-from-latex-inside-or-forward' and/or
-;;   `laic-create-overlays-from-comment-inside'
+;;   functions `laic-create-overlay-from-comment-inside-or-forward' and/or
+;;   `laic-create-overlays-from-comment-inside-or-forward'
 ;;
 ;;; License:
 ;;
@@ -364,7 +365,7 @@ FGCOLOR and return it."
 (defun laic-find-comment-or-buffer-end()
   "Return point at end of current comment or at end of buffer."
   (interactive)
-  (save-excursion ;avoid changing point
+  (save-excursion
     (while (and (< (point) (point-max)) (laic-is-point-in-comment-p))
       (forward-line))
     (point)))
@@ -425,9 +426,8 @@ FGCOLOR and return it."
 ;; if any overlays are created
 ;;----------------------------------------------------------------
 
-;;;###autoload
 (defun laic-create-overlay-from-latex-inside ()
-  "If point is inside a latex block create overlay and move point to end."
+  "If point is in a latex block in a comment, create overlay and move point to end."
   (interactive)
   (when (laic-is-point-in-comment-p)
     (let (pt beginpt endpt)
@@ -445,34 +445,81 @@ FGCOLOR and return it."
         (goto-char endpt) ;move to block end
         t)))) ;return true if succeeded
 
-;;;###autoload
 (defun laic-create-overlay-from-latex-forward ()
-  "Find next latex block, create overlay and move point to end."
+  "Find next visible latex block in comment, create overlay and move point to end."
   (interactive)
-  (let (be incomment)
+  (let (be blockisincomment)
     (setq be (laic-search-forward-block))
-    (when be ;;found block
-      (save-excursion ;avoid changing point
-        (goto-char (nth 1 be))
-        (setq incomment (laic-is-point-in-comment-p))) ;;is block in comment
-      (when incomment ;;block is in comment
+    (when (and be ;;found block
+               (pos-visible-in-window-p (nth 0 be) (selected-window))) ;;block is visible
+      (save-excursion
+        (goto-char (nth 0 be)) ;;move to block begin
+        (setq blockisincomment (laic-is-point-in-comment-p)))
+      (when blockisincomment ;;block is in comment
         (laic-create-overlay-from-block (nth 0 be) (nth 1 be) ;begin/end
                                         (laic-get-image-dpi) ;dpi
                                         (laic-get-image-background-color) (laic-get-image-foreground-color)) ;bg/fg colors
-        (goto-char (nth 1 be))))))
+        (goto-char (nth 1 be)) ;;move to block end
+        t)))) ;return true if succeeded
 
 ;;;###autoload
-(defun laic-create-overlay-from-latex-inside-or-forward ()
-  "If point is inside a latex block create overlay,
-otherwise find next latex block, and move point to end."
+(defun laic-create-overlay-from-comment-inside-or-forward ()
+  "Create overlay from current or next visible latex block and move point to end."
   (interactive)
   (when (not (laic-create-overlay-from-latex-inside))
     (laic-create-overlay-from-latex-forward)))
 
+(defun laic-create-overlays-from-comment-inside()
+  "Create overlays for all blocks in current comment, keep point unchanged."
+  (interactive)
+  (when (laic-is-point-in-comment-p) ;we're inside a comment
+    (save-excursion
+      (let (bc ec)
+        (setq bc (comment-search-backward nil t)) ;comment begin, moves point to begin
+        (setq ec (laic-find-comment-or-buffer-end)) ;comment end, from previously moved point at begin
+        (cond ((and bc ec)
+               (laic-create-overlays-from-blocks (laic-gather-blocks bc ec))
+               t) ;;return true
+              (t
+               (error "ERROR: laic-create-overlays-from-blocks could not find comment begin/end")
+               nil)))))) ;;return nil
+
+(defun laic-create-overlays-from-comment-forward()
+  "Create overlays for all blocks in next visible comment, keep point unchanced."
+  (interactive)
+  (let (be blockisincomment)
+    (setq be (laic-search-forward-block)) ;;fwd block
+    (when (and be ;;found block
+               (pos-visible-in-window-p (nth 0 be) (selected-window))) ;;block is visible
+      (save-excursion
+        (goto-char (nth 0 be)) ;;move to block begin
+        (setq blockisincomment (laic-is-point-in-comment-p)))
+      (when blockisincomment ;;block is in comment
+        (save-excursion
+          (goto-char (nth 0 be)) ;;move to block begin
+          (let (bc ec)
+            (setq bc (comment-search-backward nil t)) ;find comment begin from block begin, moves point to comment begin
+            (setq ec (laic-find-comment-or-buffer-end)) ;comment end, from previously moved point at begin
+            (cond ((and bc ec)
+                   (laic-create-overlays-from-blocks (laic-gather-blocks bc ec))
+                   t) ;;return true
+                  (t
+                   (error "ERROR: laic-create-overlays-from-blocks could not find comment begin/end")
+                   nil)))))))) ;;return nil
+
+;;;###autoload
+(defun laic-create-overlays-from-comment-inside-or-forward ()
+  "Create overlays for all blocks in current comment or next visible one."
+  (interactive)
+;;  (message "LAIC took %f seconds"
+;;           (benchmark-elapse ;IMPORTANT (require 'benchmark)
+  (when (not (laic-create-overlays-from-comment-inside))
+    (laic-create-overlays-from-comment-forward)))
+
 ;; TODO COULD remove-overlays in BEGIN END region too, good for toggle
 ;;;###autoload
 (defun laic-remove-overlays ()
-  "Remove all overlays and delete all temporary files."
+  "Remove all laic overlays and delete all temporary files."
   (interactive)
   ;;(remove-overlays) ; Would remove ALL overlays in a buffer, not just laic ones
   (while laic--list-overlays
@@ -486,43 +533,25 @@ otherwise find next latex block, and move point to end."
 
 ;;;###autoload
 (defun laic-create-overlays-from-buffer()
-  "Create image overlays for all blocks in the buffer."
+  "Create overlays for all latex blocks in the buffer."
   (interactive)
   (laic-create-overlays-from-blocks (laic-gather-blocks (point-min) (point-max))))
 ;;;###autoload
 (defun laic-create-overlays-from-region()
-  "Create image overlays for all blocks in the region."
+  "Create overlays for all latex blocks in the region."
   (interactive)
   (laic-create-overlays-from-blocks (laic-gather-blocks (region-beginning) (region-end))))
 
 ;;;###autoload
 (defun laic-create-overlays-from-buffer-comments()
-  "Create image overlays for all blocks in the buffer comments."
+  "Create overlays for all latex blocks in the buffer comments."
   (interactive)
   (laic-create-overlays-from-blocks (laic-gather-blocks-in-comments (point-min) (point-max))))
 ;;;###autoload
 (defun laic-create-overlays-from-region-comments()
-  "Create image overlays for all blocks in active region comments."
+  "Create overlays for all latex blocks in active region comments."
   (interactive)
   (laic-create-overlays-from-blocks (laic-gather-blocks-in-comments (region-beginning) (region-end))))
-
-;;;###autoload
-(defun laic-create-overlays-from-comment-inside()
-  "Create image overlays for all blocks in the current comment around point."
-  (interactive)
-;;  (message "LAIC took %f seconds"
-;;           (benchmark-elapse ;IMPORTANT (require 'benchmark)
-  (when (laic-is-point-in-comment-p) ;we're inside a comment
-    (save-excursion ;avoid changing point
-      (let (bc ec)
-        (setq bc (comment-search-backward nil t)) ;comment begin, moves point to begin
-        (setq ec (laic-find-comment-or-buffer-end)) ;comment end, from previously moved point at begin
-        (cond ((and bc ec)
-               ;;(message "be = %d" bc)
-               ;;(message "ec = %d" ec)
-               (laic-create-overlays-from-blocks (laic-gather-blocks bc ec)))
-              (t
-               (error "ERROR: laic-create-overlays-from-blocks could not find comment begin/end")))))))
 
 ;;--------------------------------
 ;; Package setup
