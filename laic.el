@@ -426,20 +426,6 @@ FGCOLOR and return it."
 ;;----------------------------------------------------------------
 
 ;;;###autoload
-(defun laic-create-overlay-from-latex-forward ()
-  "Find next latex block, create overlay and move point to end."
-  (interactive)
-  (let (be)
-    (setq be (laic-search-forward-block))
-    (cond ((eq be nil)
-           (message "laic-create-overlay-from-latex-forward() no LaTeX block found!"))
-          (t
-           (laic-create-overlay-from-block (nth 0 be) (nth 1 be) ;begin/end
-                                           (laic-get-image-dpi) ;dpi
-                                           (laic-get-image-background-color) (laic-get-image-foreground-color)) ;bg/fg colors
-           (goto-char (nth 1 be)) )))) ;move to end
-
-;;;###autoload
 (defun laic-create-overlay-from-latex-inside ()
   "If point is inside a latex block create overlay and move point to end."
   (interactive)
@@ -456,28 +442,32 @@ FGCOLOR and return it."
         (laic-create-overlay-from-block beginpt endpt
                                         (laic-get-image-dpi)
                                         (laic-get-image-background-color) (laic-get-image-foreground-color))
-        (goto-char endpt))))) ;move to block end
+        (goto-char endpt) ;move to block end
+        t)))) ;return true if succeeded
+
+;;;###autoload
+(defun laic-create-overlay-from-latex-forward ()
+  "Find next latex block, create overlay and move point to end."
+  (interactive)
+  (let (be incomment)
+    (setq be (laic-search-forward-block))
+    (when be ;;found block
+      (save-excursion ;avoid changing point
+        (goto-char (nth 1 be))
+        (setq incomment (laic-is-point-in-comment-p))) ;;is block in comment
+      (when incomment ;;block is in comment
+        (laic-create-overlay-from-block (nth 0 be) (nth 1 be) ;begin/end
+                                        (laic-get-image-dpi) ;dpi
+                                        (laic-get-image-background-color) (laic-get-image-foreground-color)) ;bg/fg colors
+        (goto-char (nth 1 be))))))
 
 ;;;###autoload
 (defun laic-create-overlay-from-latex-inside-or-forward ()
   "If point is inside a latex block create overlay,
 otherwise find next latex block, and move point to end."
   (interactive)
-    (let (pt beginpt endpt)
-      (setq pt (point)) ;get current point
-      (setq beginpt (laic-search-backward-block-begin)) ;find prev begin wrt point
-      (when beginpt ;valid begin
-        (goto-char beginpt) ;move to prev begin
-        (setq endpt (laic-search-forward-block-end)) ;find next end
-        (goto-char pt)) ;restore point
-      ;; Create overlay if inside, otherwise try forward
-      (cond ((and beginpt endpt (< pt endpt)) ;non-nil begin and end + end after current
-             (laic-create-overlay-from-block beginpt endpt ;begin/end
-                                            (laic-get-image-dpi) ;dpi
-                                            (laic-get-image-background-color) (laic-get-image-foreground-color)) ;bg/fg colors
-             (goto-char endpt))
-            (t
-             (laic-create-overlay-from-latex-forward)))))
+  (when (not (laic-create-overlay-from-latex-inside))
+    (laic-create-overlay-from-latex-forward)))
 
 ;; TODO COULD remove-overlays in BEGIN END region too, good for toggle
 ;;;###autoload
