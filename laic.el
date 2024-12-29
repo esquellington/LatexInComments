@@ -4,7 +4,7 @@
 ;; Author: Oscar Civit Flores
 ;; Keywords: LaTeX
 ;; Package-Version: ???????????
-;; URL: https://github.com/??????????'
+;; URL: https://github.com/esquellington/LatexInComments'
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "27"))
 ;;
@@ -173,9 +173,6 @@ packages may significantly slow preview generation down."
 ;;--------------------------------
 ;; LaTeX + Image processing
 ;;--------------------------------
-;;(defun DEPRECATED_laic-convert ( args )
-;;  "Run convert on ARGS argument string."
-;;  (shell-command (concat laic-command-convert " " args laic-OS-null-sink) nil nil))
 
 (defun laic-create-image-from-latex ( code dpi bgcolor fgcolor )
   "Create an image from latex string with given dpi and bg/fg colors and return it."
@@ -238,23 +235,6 @@ packages may significantly slow preview generation down."
                            laic-OS-null-sink)
                    nil nil)
 
-    ;; OLD WAY: run separate shell-command, slightly slower
-    ;; Run latex on tmp file with no output
-    ;; (shell-command (concat "cd " (laic-OS-dir laic-output-dir)
-    ;;                        "; latex --interaction=batchmode " tmpfilename_tex laic-OS-null-sink) nil nil)
-    ;; (shell-command (concat laic-command-dvipng
-    ;;                        " -D " (number-to-string dpi) ;DPI
-    ;;                        " -bg \"" (laic-convert-color-to-dvipng-arg bgcolor) "\"" ;background color
-    ;;                        " -fg \"" (laic-convert-color-to-dvipng-arg fgcolor) "\"" ;foreground color
-    ;;                        " -T tight" ;avoid whitespace -> equivalent to "convert -trim", but MUCH faster
-    ;;                        " -q" ;quiet
-    ;;                        " " tmpfilename_dvi ;input
-    ;;                        " -o " tmpfilename_png ;output
-    ;;                        laic-OS-null-sink)
-    ;;                nil nil)
-    ;; Convert: Trim empty space TEMP no longer required after -T tight
-    ;; (DEPRECAED_laic-convert (concat " -trim " tmpfilename_png " " tmpfilename_png))
-
     ;; Create image object, expand-file-name is requied
     (setq img (create-image tmpfilename_png))
 
@@ -265,6 +245,7 @@ packages may significantly slow preview generation down."
     (delete-file (expand-file-name (concat (laic-OS-dir laic-output-dir) tmpfilename ".log")))
 
     ;; TODO delete laic_errors.txt IFF no errors (file is empty)
+    ;; TODO maybe laic-cleanup hook called after mode end that deletes all temp files
     ;;(delete-file (expand-file-name (concat (laic-OS-dir laic-output-dir) "laic_errors.txt")))
 
     ;; Save .png for future deletion, as it's required while overlay is visible
@@ -276,14 +257,14 @@ packages may significantly slow preview generation down."
 (defun laic-create-overlay-from-block ( begin end dpi bgcolor fgcolor )
   "Create latex overlay from BEGIN..END region with DPI, BGCOLOR,
 FGCOLOR and return it."
-  (let (regioncode ov img)
-    (setq regioncode (buffer-substring-no-properties begin end))
+  (let (latexblock ov img)
+    (setq latexblock (buffer-substring-no-properties begin end))
     (setq ov (make-overlay begin end))
-    (setq img (laic-create-image-from-latex regioncode dpi bgcolor fgcolor))
+    (setq img (laic-create-image-from-latex latexblock dpi bgcolor fgcolor))
     (overlay-put ov 'display img) ;sets image to be displayed in overlay
     ;;(message "LCOFLB be = %d %d = %s" begin end (buffer-substring-no-properties begin end))
     (push ov laic--list-overlays)
-    ov ))
+    ov))
 
 ;;--------------------------------
 ;; LaTeX block searches
@@ -412,9 +393,8 @@ FGCOLOR and return it."
             (push be lb)) ;save block
           (goto-char e) ;skip to block end
           (setq be (laic-search-forward-block)))) ;next block
-      (reverse lb) )))
+      (reverse lb))))
 
-;; TODO Return listoverlays
 (defun laic-create-overlays-from-blocks( listblocks )
   "Create overlays eack block in the LISTBLOCKS."
   (save-excursion
@@ -474,7 +454,7 @@ otherwise find next latex block, and move point to end."
       (setq beginpt (laic-search-backward-block-begin)) ;find prev begin wrt point
       (when beginpt ;non-nil prev begin
         (setq endpt (laic-search-backward-block-end))) ;find prev end wrt point
-      ;;if no begin, or prev end is before prev begin --> point is outside begin/end
+      ;; If no begin, or prev end is before prev begin --> point is outside begin/end
       (cond ((or
               (eq beginpt nil)
               (and endpt (< beginpt endpt)))
@@ -533,17 +513,17 @@ otherwise find next latex block, and move point to end."
   (interactive)
 ;;  (message "LAIC took %f seconds"
 ;;           (benchmark-elapse ;IMPORTANT (require 'benchmark)
-             (when (laic-is-point-in-comment-p) ;we're inside a comment
-               (save-excursion ;avoid changing point
-                 (let (bc ec)
-                   (setq bc (comment-search-backward nil t)) ;comment begin, moves point
-                   (setq ec (laic-find-comment-or-buffer-end)) ;comment end, from previously moved point at begin
-                   (cond ((and bc ec)
-                          ;;(message "be = %d" bc)
-                          ;;(message "ec = %d" ec)
-                          (laic-create-overlays-from-blocks (laic-gather-blocks bc ec)))
-                         (t
-                          (error "ERROR: laic-create-overlays-from-blocks could not find comment begin/end")))))))
+  (when (laic-is-point-in-comment-p) ;we're inside a comment
+    (save-excursion ;avoid changing point
+      (let (bc ec)
+        (setq bc (comment-search-backward nil t)) ;comment begin, moves point
+        (setq ec (laic-find-comment-or-buffer-end)) ;comment end, from previously moved point at begin
+        (cond ((and bc ec)
+               ;;(message "be = %d" bc)
+               ;;(message "ec = %d" ec)
+               (laic-create-overlays-from-blocks (laic-gather-blocks bc ec)))
+              (t
+               (error "ERROR: laic-create-overlays-from-blocks could not find comment begin/end")))))))
 
 ;;--------------------------------
 ;; Package setup

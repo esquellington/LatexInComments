@@ -163,6 +163,23 @@ Align*
 - BUT if I create overlay and then delete the .png manually, it shows correctly
 - SO, we should delay .png deletion
 * DONE Remove only overlays created by laic
+* DONE Generate video screencast in GIF
+Record using Ubuntu screen recorder --> WEBM format
+WEBM and <video> tag not directly supported? --> convert to GIV
+
+ffmpeg -y -i input.webm -vf palettegen palette.png
+ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.gif
+* TODO [#A] Laic insideornext no comprova inside comment!
+- Per tant agafa block next encara que sigui molt mes avall!
+- Seria millor comprovar explicitament que es inside un comentari,
+  encara que no sigui inside un block, si no es molt confus, i pot
+  acabar convertint CODI o comentaris molt lluny d'on es crida
+- Opcionalment es podria fer que salti fins al commentbegin del proper
+  comment a la mateixa linia, si n'hi ha algun, perque sembla
+  convenient cridar laic a principi de linia i esperar que qualsevol
+  comentari es concerteixi
+- Rename to Insideornextinthisline?
+- De fet aixo tb seria aplicable a la func inside, que es podria relaxar
 * TODO [#A] Cache + reuse unmodified overlays
 - Regenrating from scratch is slow, especially if there's multiple blocks
 - Toggling on/off req full rebuild now
@@ -233,13 +250,18 @@ Align*
 - Highlight subtly even when no overlay has been created, ideally subtly
   different shade of comment color, I think Org does something similar
 - This would be nice but should be optional
-* TODO Generate video screencast in GIF
-Record using Ubuntu screen recorder --> WEBM format
-WEBM and <video> tag not directly supported? --> convert to GIV
-
-ffmpeg -y -i input.webm -vf palettegen palette.png
-ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.gif
-* DONE [#A] BUGS
+* TODO BUGS
+** TODO [#B] Multi-line latex blocks in single-line comments with per-line comment prefix do not work
+Ex, in elisp
+;; \begin{equation}
+;; e^{i\pi} = -1
+;; \end{equation}
+does not work correctly, because ;; prefixes are not removed, so they
+appear in the formula. Similarly for // prefixes in C++
+*** TODO could use "comment-start" local var to determine comment prefix for current mode, and remove it
+- For C++ it's "// "
+- For Lua it's "-- "
+- For elisp it's "; " not ";; ", which is not necessarily correct
 ** DONE [#A] (laic-create-overlays-from-comment-inside) fails if called on last comment block in a file
 Last LaTeX block in the file need to have at least 1 additional
 comment afterwards for (laic-create-overlays-from-comment-inside) to
