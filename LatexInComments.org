@@ -180,6 +180,13 @@ ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.g
   comentari es concerteixi
 - Rename to Insideornextinthisline?
 - De fet aixo tb seria aplicable a la func inside, que es podria relaxar
+** TODO New logic
+- Search current or next block
+- Verify it’s inside comment
+- Verify it’s insice screen
+- Convert
+- This is DWIM, as it minimizes unexpected behaviour but is also tolerant to being in any line within screen
+- Easy to implement too
 * TODO [#A] Cache + reuse unmodified overlays
 - Regenrating from scratch is slow, especially if there's multiple blocks
 - Toggling on/off req full rebuild now

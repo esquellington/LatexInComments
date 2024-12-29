@@ -83,15 +83,6 @@ packages may significantly slow preview generation down."
 ;; IMPORTANT: No function moves the point (all use save-excursion when required)
 ;;------------------------------------------------------------------------------------------------
 
-;; NOTE: comment-beginning returns nil if point not inside comment,
-;; which seems to work, as opposed to (comment-only-p begin end),
-;; which returns inconsistent results.
-(defun laic-is-point-in-comment-p()
-  "Return non-nil if point is in comment, nil otherwise."
-  (save-excursion ;reverts comment-beginning moving point
-    (comment-normalize-vars)
-    (not (eq (comment-beginning) nil))))
-
 ;; Compute DPI for LaTeX images.
 ;;
 ;; This would be the proper way, but requires finding physical screen
@@ -268,10 +259,9 @@ FGCOLOR and return it."
 
 ;;--------------------------------
 ;; LaTeX block searches
+;; NOTE: Do not consider whether point or blocks are inside comments
 ;;--------------------------------
-;; Return point at the beginning of BEGIN-block, and at the end of END-block
-;; Find CLOSEST forward/backward among begin/end delimiters in
-;; `laic-block-delimiter-pairs'
+
 (defun laic-search-forward-block-begin ()
   "Search forward closest latex block begin, return point at beginning."
   (let (best b ld d)
@@ -359,6 +349,27 @@ FGCOLOR and return it."
              (list begin end) )))))
 
 ;;--------------------------------
+;; Comment helpers
+;;--------------------------------
+
+;; NOTE: comment-beginning returns nil if point not inside comment,
+;; which seems to work, as opposed to (comment-only-p begin end),
+;; which returns inconsistent results.
+(defun laic-is-point-in-comment-p()
+  "Return non-nil if point is in comment, nil otherwise."
+  (save-excursion ;reverts comment-beginning moving point
+    (comment-normalize-vars)
+    (not (eq (comment-beginning) nil))))
+
+(defun laic-find-comment-or-buffer-end()
+  "Return point at end of current comment or at end of buffer."
+  (interactive)
+  (save-excursion ;avoid changing point
+    (while (and (< (point) (point-max)) (laic-is-point-in-comment-p))
+      (forward-line))
+    (point)))
+
+;;--------------------------------
 ;; Region functionality
 ;;--------------------------------
 
@@ -432,35 +443,41 @@ FGCOLOR and return it."
 (defun laic-create-overlay-from-latex-inside ()
   "If point is inside a latex block create overlay and move point to end."
   (interactive)
-  (let (pt beginpt endpt)
-    (setq pt (point)) ;get current point
-    (setq beginpt (laic-search-backward-block-begin)) ;find prev begin
-    (when beginpt ;non-nil begin
-      (goto-char beginpt) ;move to begin
-      (setq endpt (laic-search-forward-block-end))) ;find next end
-    ;; Create if found
-    (when (and beginpt endpt (< pt endpt)) ;non-nil begin and end + end after current
-      (laic-create-overlay-from-block beginpt endpt ;begin/end
-                                      (laic-get-image-dpi) ;dpi
-                                      (laic-get-image-background-color) (laic-get-image-foreground-color)) ;bg/fg colors
-      (goto-char endpt) ))) ;move to end
+  (when (laic-is-point-in-comment-p)
+    (let (pt beginpt endpt)
+      (setq pt (point)) ;get current point
+      (setq beginpt (laic-search-backward-block-begin)) ;find prev begin wrt point
+      (when beginpt ;valid begin
+        (goto-char beginpt) ;move to prev begin
+        (setq endpt (laic-search-forward-block-end)) ;find next end
+        (goto-char pt)) ;restore point
+      ;; Create overlay if valid begin/end block found around point
+      (when (and beginpt endpt (< pt endpt)) ;non-nil begin and end + end after current
+        (laic-create-overlay-from-block beginpt endpt
+                                        (laic-get-image-dpi)
+                                        (laic-get-image-background-color) (laic-get-image-foreground-color))
+        (goto-char endpt))))) ;move to block end
 
 ;;;###autoload
 (defun laic-create-overlay-from-latex-inside-or-forward ()
-  "If point is inside a latex block create overlay overlay,
+  "If point is inside a latex block create overlay,
 otherwise find next latex block, and move point to end."
   (interactive)
-    (let (beginpt endpt)
+    (let (pt beginpt endpt)
+      (setq pt (point)) ;get current point
       (setq beginpt (laic-search-backward-block-begin)) ;find prev begin wrt point
-      (when beginpt ;non-nil prev begin
-        (setq endpt (laic-search-backward-block-end))) ;find prev end wrt point
-      ;; If no begin, or prev end is before prev begin --> point is outside begin/end
-      (cond ((or
-              (eq beginpt nil)
-              (and endpt (< beginpt endpt)))
-             (laic-create-overlay-from-latex-forward)) ;;TODO Alternatively, could convert whole comment IFF inside comment
-            (t ;otherwise, point is inside begin/end
-             (laic-create-overlay-from-latex-inside)) )))
+      (when beginpt ;valid begin
+        (goto-char beginpt) ;move to prev begin
+        (setq endpt (laic-search-forward-block-end)) ;find next end
+        (goto-char pt)) ;restore point
+      ;; Create overlay if inside, otherwise try forward
+      (cond ((and beginpt endpt (< pt endpt)) ;non-nil begin and end + end after current
+             (laic-create-overlay-from-block beginpt endpt ;begin/end
+                                            (laic-get-image-dpi) ;dpi
+                                            (laic-get-image-background-color) (laic-get-image-foreground-color)) ;bg/fg colors
+             (goto-char endpt))
+            (t
+             (laic-create-overlay-from-latex-forward)))))
 
 ;; TODO COULD remove-overlays in BEGIN END region too, good for toggle
 ;;;###autoload
@@ -499,14 +516,6 @@ otherwise find next latex block, and move point to end."
   (interactive)
   (laic-create-overlays-from-blocks (laic-gather-blocks-in-comments (region-beginning) (region-end))))
 
-(defun laic-find-comment-or-buffer-end()
-  "Return point end of comment or end of buffer."
-  (interactive)
-  (save-excursion ;avoid changing point
-    (while (and (< (point) (point-max)) (laic-is-point-in-comment-p))
-      (forward-line))
-    (point)))
-
 ;;;###autoload
 (defun laic-create-overlays-from-comment-inside()
   "Create image overlays for all blocks in the current comment around point."
@@ -516,7 +525,7 @@ otherwise find next latex block, and move point to end."
   (when (laic-is-point-in-comment-p) ;we're inside a comment
     (save-excursion ;avoid changing point
       (let (bc ec)
-        (setq bc (comment-search-backward nil t)) ;comment begin, moves point
+        (setq bc (comment-search-backward nil t)) ;comment begin, moves point to begin
         (setq ec (laic-find-comment-or-buffer-end)) ;comment end, from previously moved point at begin
         (cond ((and bc ec)
                ;;(message "be = %d" bc)
