@@ -169,7 +169,7 @@ WEBM and <video> tag not directly supported? --> convert to GIV
 
 ffmpeg -y -i input.webm -vf palettegen palette.png
 ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.gif
-* DONE [#A] Laic insideornext no comprova inside comment!
+* DONE Laic insideornext no comprova inside comment!
 - Per tant agafa block next encara que sigui molt mes avall!
 - Seria millor comprovar explicitament que es inside un comentari,
   encara que no sigui inside un block, si no es molt confus, i pot
@@ -195,7 +195,10 @@ ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.g
 ** TODO Compute hash from each block source code and store it with img in hasmap
 ** TODO On generate, check hashmap first, and reuse if exists
 ** TODO Clear cache on mode exit or buffer close, but not earlier
-* TODO [#B] Toggle overlay on/off with same keys?
+* TODO [#A] Delete all tmp files on file close/emacs exit even if overlays are shown
+- Otherwise we leave spurious files in laic-tmp when buffer or Emacs
+  is closed with active overlays
+* TODO [#C] Toggle overlay on/off with same keys?
 - remove-overlays can be called with BEGIN END, good for toggle, BUT would apply
   to all overlays
 - So we'd better look for laic--list-overlays in begin/end range and remove
@@ -203,13 +206,13 @@ ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.g
 - SO, if point-in-comment, AND there's SOME overlay in the comment, remove all,
   otherwise, create all?
 - OR maybe same but if point-in-latex-block, remove it, otherwise, create it
-* TODO [#B] Single command/keybinding C-c C-x C-l "DWIM" like org-latex-preview
+* TODO [#C] Single command/keybinding C-c C-x C-l "DWIM" like org-latex-preview
 - If inside block, preview it (TOGGLE)
 - If outside block, preview all blocks
 - SEPARATE command to preview current-or-next?
   \[ a+b =c \]
 - Try to use the same logic as org-mode latex preview
-* TODO [#A] Laic as minor mode
+* TODO [#C] Laic as minor mode
 - verify ltex and dvipng commands work as configured, otherwise report
   useful message/suggestions
 - define minor mode keymap instead of individual keybindings

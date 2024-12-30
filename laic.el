@@ -179,7 +179,7 @@ packages may significantly slow preview generation down."
         img)
 
     ;; Create temporary filename using Unix epoch in seconds
-    (setq tmpfilename (format "tmp-%d" (* 1000 (float-time))))
+    (setq tmpfilename (format "tmp-%d" (* 1000 (float-time)))) ;;TODO use code hash instead of time
     (setq tmpfilename_tex (expand-file-name (concat (laic-OS-dir laic-output-dir) tmpfilename ".tex")))
     (setq tmpfilename_dvi (expand-file-name (concat (laic-OS-dir laic-output-dir) tmpfilename ".dvi")))
     (setq tmpfilename_png (expand-file-name (concat (laic-OS-dir laic-output-dir) tmpfilename ".png")))
@@ -516,14 +516,19 @@ FGCOLOR and return it."
   (when (not (laic-create-overlays-from-comment-inside))
     (laic-create-overlays-from-comment-forward)))
 
-;; TODO COULD remove-overlays in BEGIN END region too, good for toggle
-;;;###autoload
+;; TODO COULD remove-overlays in BEGIN END region too, in a given
+;; comment for example, useful to toggle
 (defun laic-remove-overlays ()
+  "Remove all laic overlays."
+  (interactive)
+  (while laic--list-overlays
+    (delete-overlay (pop laic--list-overlays))))
+
+;;;###autoload
+(defun laic-remove-overlays-and-files ()
   "Remove all laic overlays and delete all temporary files."
   (interactive)
-  ;;(remove-overlays) ; Would remove ALL overlays in a buffer, not just laic ones
-  (while laic--list-overlays
-    (delete-overlay (pop laic--list-overlays)))
+  (laic-remove-overlays)
   (while laic--list-temp-files
     (delete-file (pop laic--list-temp-files))))
 
