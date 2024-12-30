@@ -192,9 +192,14 @@ ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.g
 - Toggling on/off req full rebuild now
 - Should be instant, probably latexpreview in org does this
 - Windows is SUPER slow so would benefit massively there
-** TODO Compute hash from each block source code and store it with img in hasmap
-** TODO On generate, check hashmap first, and reuse if exists
+** DONE Compute hash from each block source code and store it with img in hasmap
+** DONE On generate, check hashmap first, and reuse if exists
+** DONE Ensure same latex block in different places reuses same pregen image
 ** TODO Clear cache on mode exit or buffer close, but not earlier
+** TODO PROFILE!
+** TODO maybe cache is optional
+** TODO Cache img in laic--list-temp-files, not just file name
+** TODO Retrieve img from cache, not filename, should be faster, avoids reloading files for different overlays
 * TODO [#A] Delete all tmp files on file close/emacs exit even if overlays are shown
 - Otherwise we leave spurious files in laic-tmp when buffer or Emacs
   is closed with active overlays

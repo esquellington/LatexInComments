@@ -178,8 +178,12 @@ packages may significantly slow preview generation down."
         prefix packages extra fullcode
         img)
 
-    ;; Create temporary filename using Unix epoch in seconds
-    (setq tmpfilename (format "tmp-%d" (* 1000 (float-time)))) ;;TODO use code hash instead of time
+    ;; Create unique temporary filename using Unix epoch in seconds DEPRECATED
+    ;;(setq tmpfilename (format "tmp-%d" (* 1000 (float-time))))
+
+    ;; Create unique temporary filename using hash
+    (setq tmpfilename (secure-hash 'md5 (format "%s-%d-%s-%s" code dpi bgcolor fgcolor)))
+
     (setq tmpfilename_tex (expand-file-name (concat (laic-OS-dir laic-output-dir) tmpfilename ".tex")))
     (setq tmpfilename_dvi (expand-file-name (concat (laic-OS-dir laic-output-dir) tmpfilename ".dvi")))
     (setq tmpfilename_png (expand-file-name (concat (laic-OS-dir laic-output-dir) tmpfilename ".png")))
@@ -227,7 +231,7 @@ packages may significantly slow preview generation down."
                            laic-OS-null-sink)
                    nil nil)
 
-    ;; Create image object, expand-file-name is requied
+    ;; Create image object from filename
     (setq img (create-image tmpfilename_png))
 
     ;; Cleanup temp files
@@ -246,13 +250,34 @@ packages may significantly slow preview generation down."
     ;; Return image
     img))
 
+(defun laic-find-image-from-latex ( code dpi bgcolor fgcolor )
+  "Find an image from latex string with given dpi and bg/fg colors and return it."
+  (let (tmpfilename tmpfilename_png
+        img)
+
+    ;; Create unique temporary filename using hash
+    (setq tmpfilename (secure-hash 'md5 (format "%s-%d-%s-%s" code dpi bgcolor fgcolor)))
+    (setq tmpfilename_png (expand-file-name (concat (laic-OS-dir laic-output-dir) tmpfilename ".png")))
+
+    ;; TODO find in laic--list-temp-files instead!? and even save IMG not tmpfilename_png, or BOTH
+    (when (file-exists-p tmpfilename_png)
+      (message "tmpfilename_png %s exists, using cached image!" tmpfilename_png)
+      ;; Create image object from filename
+      (setq img (create-image tmpfilename_png))
+      img)))
+
 (defun laic-create-overlay-from-block ( begin end dpi bgcolor fgcolor )
   "Create latex overlay from BEGIN..END region with DPI, BGCOLOR,
 FGCOLOR and return it."
   (let (latexblock ov img)
     (setq latexblock (buffer-substring-no-properties begin end))
     (setq ov (make-overlay begin end))
-    (setq img (laic-create-image-from-latex latexblock dpi bgcolor fgcolor))
+
+    ;; Find cached img, or create from scratch
+    (setq img (laic-find-image-from-latex latexblock dpi bgcolor fgcolor))
+    (when (not img)
+      (setq img (laic-create-image-from-latex latexblock dpi bgcolor fgcolor)))
+
     (overlay-put ov 'display img) ;sets image to be displayed in overlay
     ;;(message "LCOFLB be = %d %d = %s" begin end (buffer-substring-no-properties begin end))
     (push ov laic--list-overlays)
