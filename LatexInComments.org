@@ -195,14 +195,19 @@ ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.g
 ** DONE Compute hash from each block source code and store it with img in hasmap
 ** DONE On generate, check hashmap first, and reuse if exists
 ** DONE Ensure same latex block in different places reuses same pregen image
+** DONE Cache img in laic--list-temp-files, not just file name
+** DONE Retrieve img from cache, not filename, should be faster, avoids reloading files for different overlays
 ** TODO Clear cache on mode exit or buffer close, but not earlier
 ** TODO PROFILE!
 ** TODO maybe cache is optional
-** TODO Cache img in laic--list-temp-files, not just file name
-** TODO Retrieve img from cache, not filename, should be faster, avoids reloading files for different overlays
 * TODO [#A] Delete all tmp files on file close/emacs exit even if overlays are shown
 - Otherwise we leave spurious files in laic-tmp when buffer or Emacs
   is closed with active overlays
+** TODO laic-cleanup
+- Delete temporaries
+- Delete directory
+- Call on buffer and Emacs close for all buffers with overlays?
+  - Would be a lot easier if laic were a minor mode, and call on mode exit
 * TODO [#C] Toggle overlay on/off with same keys?
 - remove-overlays can be called with BEGIN END, good for toggle, BUT would apply
   to all overlays

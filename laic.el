@@ -154,9 +154,9 @@ packages may significantly slow preview generation down."
   "OS-specific commandline separator string, to concatenate commands."
 )
 
-(defvar-local laic--list-temp-files
+(defvar-local laic--list-images
   ()
-  "Buffer-local list of temporary files to be deleted later.")
+  "Buffer-local list of images to reuse and files to be deleted later.")
 
 (defvar-local laic--list-overlays
   ()
@@ -244,27 +244,36 @@ packages may significantly slow preview generation down."
     ;; TODO maybe laic-cleanup hook called after mode end that deletes all temp files
     ;;(delete-file (expand-file-name (concat (laic-OS-dir laic-output-dir) "laic_errors.txt")))
 
-    ;; Save .png for future deletion, as it's required while overlay is visible
-    (push tmpfilename_png laic--list-temp-files)
+    ;; Save (png img) for future deletion and reuse, as file must exist while overlay is visible
+    (push (list tmpfilename_png img) laic--list-images)
 
     ;; Return image
     img))
 
 (defun laic-find-image-from-latex ( code dpi bgcolor fgcolor )
   "Find an image from latex string with given dpi and bg/fg colors and return it."
-  (let (tmpfilename tmpfilename_png
-        img)
+  (let (tmpfilename tmpfilename_png found)
 
     ;; Create unique temporary filename using hash
     (setq tmpfilename (secure-hash 'md5 (format "%s-%d-%s-%s" code dpi bgcolor fgcolor)))
     (setq tmpfilename_png (expand-file-name (concat (laic-OS-dir laic-output-dir) tmpfilename ".png")))
 
-    ;; TODO find in laic--list-temp-files instead!? and even save IMG not tmpfilename_png, or BOTH
-    (when (file-exists-p tmpfilename_png)
-      (message "tmpfilename_png %s exists, using cached image!" tmpfilename_png)
-      ;; Create image object from filename
-      (setq img (create-image tmpfilename_png))
-      img)))
+    ;; Find cached image with same name (see http://xahlee.info/emacs/emacs/elisp_sequence_find.html)
+    (setq found (seq-find
+                 (lambda (x) (string-equal (nth 0 x) tmpfilename_png))
+                 laic--list-images))
+
+    ;; Return img if found
+    (when found
+      (message "tmpfilename_png %s exists, using cached IMG!" tmpfilename_png)
+      (nth 1 found))))
+
+;;    ;; TEMP OLD WAY: find in filesystem, not in laic--list-images
+;;    (when (file-exists-p tmpfilename_png)
+;;      (message "tmpfilename_png %s exists, using cached PNG!" tmpfilename_png)
+;;      ;; Create image object from filename
+;;      (setq img (create-image tmpfilename_png))
+;;      img)))
 
 (defun laic-create-overlay-from-block ( begin end dpi bgcolor fgcolor )
   "Create latex overlay from BEGIN..END region with DPI, BGCOLOR,
@@ -554,8 +563,11 @@ FGCOLOR and return it."
   "Remove all laic overlays and delete all temporary files."
   (interactive)
   (laic-remove-overlays)
-  (while laic--list-temp-files
-    (delete-file (pop laic--list-temp-files))))
+  (while laic--list-images
+    (let (imagedata)
+      (setq imagedata (pop laic--list-images))
+      ;;(message "DELETING %s IMG" (nth 0 imagedata))
+      (delete-file (nth 0 imagedata)))))
 
 ;;----------------------------------------------------------------
 ;; Buffer/Region interactive functionality
