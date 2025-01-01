@@ -13,4 +13,8 @@
    \end{align*}
 --]]
 
--- \[ \beta \]
+-- Multi-line LaTeX block in consecutive single-line comments is messy
+-- \begin{align*}
+--   \alpha &= ( \beta + \eta ) \\ \gamma &= [ \delta - \nu ] \\
+--   \alpha &= ( \nu + \nabla ) \\ \xi &= [ \omega - \mu ]
+-- \end{align*}

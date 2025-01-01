@@ -270,15 +270,15 @@ ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.g
 - Highlight subtly even when no overlay has been created, ideally subtly
   different shade of comment color, I think Org does something similar
 - This would be nice but should be optional
-* TODO BUGS
-** TODO [#B] Multi-line latex blocks in single-line comments with per-line comment prefix do not work
+* DONE BUGS
+** DONE [#B] Multi-line latex blocks in single-line comments with per-line comment prefix do not work
 Ex, in elisp
 ;; \begin{equation}
 ;; e^{i\pi} = -1
 ;; \end{equation}
 does not work correctly, because ;; prefixes are not removed, so they
 appear in the formula. Similarly for // prefixes in C++
-*** TODO could use "comment-start" local var to determine comment prefix for current mode, and remove it
+*** DONE could use "comment-start" local var to determine comment prefix for current mode, and remove it
 - For C++ it's "// "
 - For Lua it's "-- "
 - For elisp it's "; " not ";; ", which is not necessarily correct

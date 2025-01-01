@@ -8,8 +8,8 @@ and display them as overlays.
 * Requirements
 
 Should work out of the box in any Emacs programming mode that can
-identify comment blocks with the builtin elisp function
-*comment-beginning*, and has been tested in C++, GLSL, Lua and elisp.
+identify comments with the builtin elisp function *comment-beginning*,
+and has been tested in C++, GLSL, Lua and elisp.
 
 The only external requirement is a [[https://www.latex-project.org/][LaTeX]] distribution tha provides the
 *latex* command, and the *dvipng* commandline utility:

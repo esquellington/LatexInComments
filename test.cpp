@@ -97,6 +97,17 @@
    \[ v_t = (I - \hat n \hat n^T) v = v - v_n \]
 */
 
+// Multi-line LaTeX block in consecutive single-line comments is
+// messy, we need to remove the "//" prefix from the latex block
+// otherwise they're considered latex and interfere with output. Also,
+// align separator "\\" cannot appear at the end of a line in C++, as
+// it's mistaken with a split-line
+//
+// \begin{align*}
+//   \alpha &= ( \beta + \eta ) \\ \gamma &= [ \delta - \nu ] \\ \,
+//   \alpha &= ( \nu + \nabla ) \\ \xi &= [ \omega - \mu ]
+// \end{align*}
+
 #include <list>
 /* Compute average and variance for a list of floats in a single pass
 

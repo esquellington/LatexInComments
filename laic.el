@@ -125,12 +125,7 @@ packages may significantly slow preview generation down."
 
 ;;--------------------------------
 ;; OS-specific
-;; NOTE: same as in org-sketch.el
-;; OPTIMIZATION: It may be faster to send both to /dev/null
 ;;--------------------------------
-(defun laic-OS-touch-file ( filename )
-  "OS-specific touch FILENAME to create it or update its timestamp."
-  (call-process "touch" nil nil nil filename))
 
 (defun laic-OS-dir ( path )
   "OS-specific file-name-as-directory to convert PATH with \ to / if necessary."
@@ -153,6 +148,10 @@ packages may significantly slow preview generation down."
          ";"))
   "OS-specific commandline separator string, to concatenate commands."
 )
+
+;;--------------------------------
+;; buffer-local vars
+;;--------------------------------
 
 (defvar-local laic--list-images
   ()
@@ -278,15 +277,18 @@ packages may significantly slow preview generation down."
 (defun laic-create-overlay-from-block ( begin end dpi bgcolor fgcolor )
   "Create latex overlay from BEGIN..END region with DPI, BGCOLOR,
 FGCOLOR and return it."
-  (let (latexblock ov img)
+  (let (latexblock latexblocknormalized ov img)
     (setq latexblock (buffer-substring-no-properties begin end))
-    (setq ov (make-overlay begin end))
+
+    ;; remove potential single-line 'comment-start' substring from latex block
+    (setq latexblocknormalized (string-replace comment-start "" latexblock))
 
     ;; Find cached img, or create from scratch
-    (setq img (laic-find-image-from-latex latexblock dpi bgcolor fgcolor))
+    (setq img (laic-find-image-from-latex latexblocknormalized dpi bgcolor fgcolor))
     (when (not img)
-      (setq img (laic-create-image-from-latex latexblock dpi bgcolor fgcolor)))
+      (setq img (laic-create-image-from-latex latexblocknormalized dpi bgcolor fgcolor)))
 
+    (setq ov (make-overlay begin end))
     (overlay-put ov 'display img) ;sets image to be displayed in overlay
     ;;(message "LCOFLB be = %d %d = %s" begin end (buffer-substring-no-properties begin end))
     (push ov laic--list-overlays)
