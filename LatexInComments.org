@@ -182,8 +182,8 @@ ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.g
 - De fet aixo tb seria aplicable a la func inside, que es podria relaxar
 ** DONE New logic
 - Search current or next block
-- Verify it’s inside comment
-- Verify it’s insice screen
+- Verify it's inside comment
+- Verify it's insice screen
 - Convert
 - This is DWIM, as it minimizes unexpected behaviour but is also tolerant to being in any line within screen
 - Easy to implement too
