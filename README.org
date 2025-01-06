@@ -63,10 +63,23 @@ explain complex formulas. The most common options seem to be:
   without showing them explicitly, which requires an extra step to
   understand the code.
 
-Comments are not code, so in my opinion there's no reason to limit
-their expressiveness to plain text. LaTeX is reasonably easy to
-write and read directly in comments, and can be automatically parsed
-to display math as images beside code itself.
+Literate programming is a neat idea, but it's a radical/idealistic
+approach that has its own set of drawbacks.
+
+Augmenting comments to increase their expressiveness beyond plain text
+seems a good compromise. LaTeX is reasonably easy to write and
+read directly in comments, and can be automatically parsed to display
+math as images beside code itself.
+
+This is a powerful idea, IMHO, but overusing it can be
+counterproductive. Writing multi-page formulas in comments, or using
+very complex notation, defining custom macros, etc, can make comments
+verbose and hard to read or even ignore in plain text.
+
+Personally I use it often for short math snippets, and sometimes for
+longer derivations that are relevant enough to keep beside the code
+itself. I try to keep formulas as simple as possible and "readable" in
+plain text, when possible.
 
 ** Design
 
