@@ -81,6 +81,9 @@ longer derivations that are relevant enough to keep beside the code
 itself. I try to keep formulas as simple as possible and "readable" in
 plain text, when possible.
 
+If you already typeset math in LaTeX in a paper or documentation, you
+can copy relevant formulas directly to code comments.
+
 ** Design
 
 The main inspiration is org-latex-preview, that allows displaying
