@@ -11,11 +11,13 @@ Should work out of the box in any Emacs programming mode that can
 identify comments with the builtin elisp function *comment-beginning*,
 and has been tested in C++, GLSL, Lua and elisp.
 
-The only external requirement is a [[https://www.latex-project.org/][LaTeX]] distribution tha provides the
-*latex* command, and the *dvipng* commandline utility:
-- Tested with [[https://en.wikipedia.org/wiki/TeX_Live][TeX Live]] on Ubuntu and Windows10.
-- Should work with [[https://miktex.org/][MiKTeX]] and [[https://www.tug.org/mactex/][MacTeX]]
-- *dvipng* may need to be installed independently and customized (see *Customization*)
+The only external requirements are:
+- a [[https://www.latex-project.org/][LaTeX]] distribution that provides the *latex* command
+- the *dvipng* commandline utility
+
+It has only been tested with [[https://en.wikipedia.org/wiki/TeX_Live][TeX Live]] on Ubuntu and Windows10, but
+should work with [[https://miktex.org/][MiKTeX]] and [[https://www.tug.org/mactex/][MacTeX]]. The *dvipng* utility may need to
+be installed independently and customized (see *Customization*)
 
 * Installation
 
@@ -67,19 +69,20 @@ Literate programming is a neat idea, but it's a radical/idealistic
 approach that has its own set of drawbacks.
 
 Augmenting comments to increase their expressiveness beyond plain text
-seems a good compromise. LaTeX is reasonably easy to write and
-read directly in comments, and can be automatically parsed to display
-math as images beside code itself.
+seems a good compromise. LaTeX is reasonably easy to write and read,
+and can be automatically parsed to display math as images beside code
+itself.
 
 This is a powerful idea, IMHO, but overusing it can be
 counterproductive. Writing multi-page formulas in comments, or using
 very complex notation, defining custom macros, etc, can make comments
-verbose and hard to read or even ignore in plain text.
+verbose, harder to read in plain text, and harder to ignore when
+focusing on code.
 
 Personally I use it often for short math snippets, and sometimes for
 longer derivations that are relevant enough to keep beside the code
 itself. I try to keep formulas as simple as possible and "readable" in
-plain text, when possible.
+plain text.
 
 If you already typeset math in LaTeX in a paper or documentation, you
 can copy relevant formulas directly to code comments.
