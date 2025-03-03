@@ -20,9 +20,9 @@ math blocks in comments:
 - *laic-remove-overlays-and-files*: Remove all laic overlays from the
   current buffer and delete cached images from disk.
 
-Images are generated on first "create" operation, and cached for fast
-show/hide. They are only deleted when a buffer is closed or when
-*laic-remove-overlays-and-files* is explicitly called.
+Images are generated on the first show operation, and cached for fast
+show/hide afterwards. They are only deleted when the buffer is closed
+or when *laic-remove-overlays-and-files* is explicitly called.
 
 * Requirements
 
@@ -49,7 +49,7 @@ example:
 
 and require it somewhere in your init.el. The most convenient way is
 to add a programming mode hook that loads *laic* and sets up
-keybindings for the most relevant interactive functions:
+keybindings for the desired interactive functions. Ex:
 #+BEGIN_SRC elisp
   (add-hook 'prog-mode-hook
    (function
@@ -75,16 +75,15 @@ A few options can be customized with (customize-group 'laic)
 
 * Motivation
 
-When writing math-heavy code it is often necessary to cite, show and
+When writing math-heavy code it's often necessary to cite, show and
 explain complex formulas. The most common options seem to be:
 - Explaining math in plain text, often verbosely.
-- Using ad-hoc textual math, often ends up looking almost like
+- Using ad-hoc textual math that often ends up looking almost like
   code, just formatted differently.
-- Citing formulas in source papers/books, maybe as hyperlinks,
-  without showing them explicitly, which requires an extra step to
-  understand the code.
+- Citing or linking formulas in source papers/books/websites without
+  showing them explicitly, which requires extra steps and viewers.
 
-I've used all these options in the past, and they're far from
+I've used these options in the past, and they're viable but far from
 optimal. Emacs org-mode offers a very convenient way to quickly
 preview LaTeX fragments directly in the editor ([[https://orgmode.org/manual/Previewing-LaTeX-fragments.html][org-latex-preview]]),
 and I realized something similar in comments could be useful.
