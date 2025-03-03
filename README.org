@@ -3,7 +3,8 @@ $\LaTeX$ math blocks in code comments. It identifies math blocks
 automatically and calls LaTeX under the hood to render them as images
 and display them as overlays.
 
-#+html: <p align="center"> <img src="laic_cpp_example.gif" width="75%"/> </p>
+#+html: <p align="center"> <img src="laic_cpp_example.gif" width="75%" alt="Animated GIF image shows a short C++ function with a comment block that contains LaTeX-formatted math, alternating between their text and graphical representations."/> </p>
+
 #+html: <p align="center"> A somewhat excessive example of LaTeX in C++ comments </p>
 
 * Usage
