@@ -510,6 +510,8 @@ FGCOLOR and return it."
         (goto-char (nth 0 be)) ;;move to block begin
         (setq blockisincomment (laic-is-point-in-comment-p)))
       (when blockisincomment ;;block is in comment
+        (add-hook 'kill-buffer-hook #'laic-remove-overlays-and-files nil t) ;cleanup on kill buffer, local
+        (add-hook 'kill-emacs-hook #'laic-remove-overlays-and-files nil t) ;cleanup on kill emacs, local
         (laic-create-overlay-from-block (nth 0 be) (nth 1 be) ;begin/end
                                         (laic-get-image-dpi) ;dpi
                                         (laic-get-image-background-color) (laic-get-image-foreground-color)) ;bg/fg colors
@@ -527,6 +529,8 @@ FGCOLOR and return it."
   "Create overlays for all blocks in current comment, keep point unchanged."
   (interactive)
   (when (laic-is-point-in-comment-p) ;we're inside a comment
+    (add-hook 'kill-buffer-hook #'laic-remove-overlays-and-files nil t) ;cleanup on kill buffer, local
+    (add-hook 'kill-emacs-hook #'laic-remove-overlays-and-files nil t) ;cleanup on kill emacs, local
     (save-excursion
       (let (bc ec)
         (setq bc (comment-search-backward nil t)) ;comment begin, moves point to begin
