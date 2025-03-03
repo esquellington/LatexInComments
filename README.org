@@ -3,7 +3,7 @@ $\LaTeX$ math blocks in code comments. It identifies math blocks
 automatically and calls LaTeX under the hood to render them as images
 and display them as overlays.
 
-#+html: <p align="center"> <img src="laic_cpp_example.gif" width="75%" title"LaTeX in C++ comments"/> </p>
+#+html: <p align="center"> <img src="laic_cpp_example.gif" width="75%" caption"A somewhat excessive example of LaTeX in C++ comments"/> </p>
 
 * Usage
 
@@ -97,10 +97,11 @@ LaTeX elsewhere (ex: in a paper, in documentation, in org-mode,
 etc...) you can easily copy relevant formulas directly to code
 comments.
 
-I use LaTeX in comments quite often standalone formulas, and sometimes
-for longer derivations that are relevant enough to show beside code. I
-try to keep formulas as simple as possible and readable in plain text,
-so that they remain useful even when *laic* is not available.
+I use LaTeX in comments quite often for standalone formulas, and
+sometimes for longer derivations that are relevant enough to show
+beside code. I try to keep formulas as simple as possible and readable
+in plain text, so that they remain useful even when *laic* is not
+available.
 
 Overall I'm happy with the result, but I find it important to resist
 the temptation of overusing it. Writing multi-page formulas, relying
