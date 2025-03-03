@@ -187,7 +187,7 @@ ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.g
 - Convert
 - This is DWIM, as it minimizes unexpected behaviour but is also tolerant to being in any line within screen
 - Easy to implement too
-* TODO [#A] Cache + reuse unmodified overlays
+* DONE [#A] Cache + reuse unmodified overlays
 - Regenrating from scratch is slow, especially if there's multiple blocks
 - Toggling on/off req full rebuild now
 - Should be instant, probably latexpreview in org does this
@@ -197,9 +197,6 @@ ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.g
 ** DONE Ensure same latex block in different places reuses same pregen image
 ** DONE Cache img in laic--list-temp-files, not just file name
 ** DONE Retrieve img from cache, not filename, should be faster, avoids reloading files for different overlays
-** TODO Clear cache on mode exit or buffer close, but not earlier
-** TODO PROFILE!
-** TODO maybe cache is optional
 * TODO [#A] Delete all tmp files on file close/emacs exit even if overlays are shown
 - Otherwise we leave spurious files in laic-tmp when buffer or Emacs
   is closed with active overlays
@@ -254,11 +251,11 @@ ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.g
 - This is probably useless, forget it, it's best done using unicode
   symbols actually, but also a rabbithole I do NOT WANT TO fall into
 ** TODO Better overlays
-*** TODO laic-remove-overlays --> ONLY owned overlays
-**** TODO Save in list OR assign specific property to identify laic-created overlays
-**** TODO Find current/closest/next overlay with https://www.gnu.org/software/emacs/manual/html_node/elisp/Finding-Overlays.html
+*** DONE laic-remove-overlays --> ONLY owned overlays
+**** DONE Save in list OR assign specific property to identify laic-created overlays
+*** TODO Find current/closest/next overlay with https://www.gnu.org/software/emacs/manual/html_node/elisp/Finding-Overlays.html
 *** TODO Consider ov package for overlay niceties
-** TODO Consider tooltip instead of overlay
+** TODO Consider tooltip on hover, instead of static overlay
 - This explains how to create overlays and image tooltips
   http://kitchingroup.cheme.cmu.edu/blog/2016/03/21/Displaying-image-overlays-on-image-filenames-in-Emacs/
 - Less intrusive

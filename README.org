@@ -21,8 +21,11 @@ math blocks in comments:
   current buffer and delete cached images from disk.
 
 Images are generated on the first show operation, and cached for fast
-show/hide afterwards. They are only deleted when the buffer is closed
-or when *laic-remove-overlays-and-files* is explicitly called.
+show/hide afterwards. They are only deleted when
+*laic-remove-overlays-and-files* is explicitly called.
+
+*NOTE*: in a future revision cached files will be deleted when the
+buffer is closed.
 
 * Requirements
 
