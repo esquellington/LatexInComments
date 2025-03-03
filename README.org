@@ -5,6 +5,24 @@ and display them as overlays.
 
 #+html: <p align="center"> <img src="laic_cpp_example.gif" width="75%" title"LaTeX in C++ comments"/> </p>
 
+* Usage
+
+The package offers a few interactive functions that to show and hide
+math blocks in comments:
+- *laic-create-overlay-from-comment-inside-or-forward*: Create overlay
+  for current or next visible latex block in a comment, relative to
+  cursor position.
+- *laic-create-overlays-from-comment-inside-or-forward*: Create
+  overlays for all latex blocks in the current comment, relative to
+  cursor position.
+- *laic-remove-overlays*: Remove all laic overlays fromt the current buffer.
+- *laic-remove-overlays-and-files*: Remove all laic overlays from he
+  current and delete cached images from disk.
+
+Images are generated on first "create" operation, and cached for fast
+show/hide. They are only deleted when a buffer is closed or when
+*laic-remove-overlays-and-files* is explicitly called.
+
 * Requirements
 
 Should work out of the box in any Emacs programming mode that can
@@ -46,17 +64,10 @@ keybindings for the most relevant interactive functions:
      (local-set-key (kbd "C-c C-x r") 'laic-remove-overlays-and-files)
 #+END_SRC
 
-* Usage
-
-Interactive functions:
-- *laic-create-overlay-from-comment-inside-or-forward*: Create overlay for current or next visible latex block in a comment.
-- *laic-create-overlays-from-comment-inside-or-forward*: Create overlays for all latex blocks in the current comment.
-- *laic-remove-overlays*: Remove all laic overlays.
-- *laic-remove-overlays-and-files*: Remove all laic overlays and delete cached images from disk.
-
 * Customization
 
-- *laic-block-delimiter-pairs*
+A few options can be customized with (customize-group 'laic)
+- *laic-block-delimiter-pairs*: list of balanced begin/end delimiter pairs.
 - *laic-command-dvipng*: defaults to "dvipng".
 - *laic-extra-packages*: additional packages can be added here (amsmath and amsfonts are included by default).
 - *laic-output-dir*: temporary files are stored in this folder, relative to current file path.
@@ -71,34 +82,37 @@ explain complex formulas. The most common options seem to be:
   without showing them explicitly, which requires an extra step to
   understand the code.
 
-Literate programming is a neat idea, but it's a radical/idealistic
-approach that has its own set of drawbacks.
+I've used all these options in the past, and they're far from
+optimal. On the other side, org-mode offers a very convenient way to
+quickly preview inline LaTeX fragments ([[https://orgmode.org/manual/Previewing-LaTeX-fragments.html][org-latex-preview]]), and I
+realized something similar in comments could be useful.
 
-Augmenting comments to increase their expressiveness beyond plain text
-seems a good compromise. LaTeX is reasonably easy to write and read,
-and can be automatically parsed to display math as images beside code
-itself.
+Augmenting code comments to increase their expressiveness beyond that
+of plain text is a powerful idea, in my humble opinion. LaTeX math can
+be considered a domain-specific language that is reasonably easy to
+write and read. If you already typeset math in LaTeX elsewhere (ex: in
+a paper, in documentation, in org-mode, etc...) you can copy easily
+relevant formulas directly to code comments.
 
-This is a powerful idea, IMHO, but overusing it can be
-counterproductive. Writing multi-page formulas in comments, or using
-very complex notation, defining custom macros, etc, can make comments
-verbose, harder to read in plain text, and harder to ignore when
-focusing on code.
+Personally I mostly use *laic* for short math snippets, and sometimes
+for longer derivations that are relevant enough to keep beside the
+code itself. I try to keep formulas as simple as possible and readable
+in plain text, so that they remain useful even when *laic* is not
+available.
 
-Personally I use it often for short math snippets, and sometimes for
-longer derivations that are relevant enough to keep beside the code
-itself. I try to keep formulas as simple as possible and "readable" in
-plain text.
-
-If you already typeset math in LaTeX in a paper or documentation, you
-can copy relevant formulas directly to code comments.
+Overall I'm really happy with the result. However, I find it important
+to resist the temptation of overusing it. Writing multi-page formulas
+in comments, relying on very complex notation, defining custom macros,
+etc, is counter-productive, can make comments too verbose, harder to
+read in plain text, and harder to ignore when focusing on code. More
+so when collaborating with other programmers.
 
 ** Design
 
 The main inspiration is org-latex-preview, that allows displaying
 inline math in org-mode buffers. only works in org-mode buffers by
-default, requires additional latex packages, and is slower on the 1st
-invocation.
+default, requires additional latex packages, and is somewhat slow on
+the first invocation.
 
 *laic* prioritizes simplicity and speed over features:
 - minimal dependencies: just latex + dvipng.
@@ -109,11 +123,14 @@ invocation.
 ** Alternatives
 *TODO* not sure this is all accurate, review, don't say anything that
  cannot be proved
+-  Is the main inspiration, essentially the same idea
+  in org-mode.
 - [[https://github.com/TobiasZawada/texfrag][texfrag]] is the only direct alternative I know of, more general and
-  ambitious than *laic*, but also slower and harder to install.
+  ambitious than *laic*, but also slower and harder to install, from
+  my experience.
 - [[https://www.doxygen.nl/manual/formulas.html][Doxygen]] supports LaTex math wrapped in its custom "formula" tags,
   but only supports a handful of languages, imposes additional
   requirements on comment formatting, and involves a slow HTML
   generation step.
-
-* TODO WIP                                                         :noexport:
+- [[https://en.wikipedia.org/wiki/Literate_programming][Literate programming]] is a neat idea, but not remotely practical in
+  many situations, such as large legacy codebases.
