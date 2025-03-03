@@ -12,22 +12,25 @@ identify comments with the builtin elisp function *comment-beginning*,
 and has been tested in C++, GLSL, Lua and elisp.
 
 The only external requirements are:
-- a [[https://www.latex-project.org/][LaTeX]] distribution that provides the *latex* command
-- the *dvipng* commandline utility
-
-It has only been tested with [[https://en.wikipedia.org/wiki/TeX_Live][TeX Live]] on Ubuntu and Windows10, but
-should work with [[https://miktex.org/][MiKTeX]] and [[https://www.tug.org/mactex/][MacTeX]]. The *dvipng* utility may need to
-be installed independently and customized (see *Customization*)
+- A [[https://www.latex-project.org/][LaTeX]] distribution that provides the *latex* command. Tested with
+  [[https://en.wikipedia.org/wiki/TeX_Live][TeX Live]] on Ubuntu and Windows10, but should work with [[https://miktex.org/][MiKTeX]] and
+  [[https://www.tug.org/mactex/][MacTeX]] too.
+- The *dvipng* commandline utility. May need to be installed
+  independently and customized (see *Customization*)
 
 * Installation
 
 At the moment *laic* can only be installed through direct
-download. Just copy [[file:laic.el]] to your local lisp folder and require
-it in your startup file.
+download. Just copy [[file:laic.el]] to your local lisp folder, for
+example:
 
-The following elisp code adds a hook to all programming modes that
-loads *laic* and sets up keybindings for the most relevant interactive
-functions.
+#+BEGIN_SRC elisp
+  (add-to-list 'load-path "~/.emacs.d/lisp/")
+#+END_SRC
+
+and require it somewhere in your init.el. The most convenient way is
+to add a programming mode hook that loads *laic* and sets up
+keybindings for the most relevant interactive functions:
 #+BEGIN_SRC elisp
   (add-hook 'prog-mode-hook
    (function
@@ -36,9 +39,11 @@ functions.
      ;; Create overlay for current or next visible latex block in a comment.
      (local-set-key (kbd "C-c C-x C-l") 'laic-create-overlay-from-latex-inside-or-forward)
      ;; Create overlays for all latex blocks in the current comment.
-     (local-set-key (kbd "C-c c") 'laic-create-overlays-from-comment-inside-or-forward)
+     (local-set-key (kbd "C-c C-x C-o") 'laic-create-overlays-from-comment-inside-or-forward)
      ;; Remove all laic overlays
-     (local-set-key (kbd "C-c r") 'laic-remove-overlays))))
+     (local-set-key (kbd "C-c C-x o") 'laic-remove-overlays)
+     ;; Remove all laic overlays and delete cache
+     (local-set-key (kbd "C-c C-x r") 'laic-remove-overlays-and-files)
 #+END_SRC
 
 * Usage
@@ -47,6 +52,7 @@ Interactive functions:
 - *laic-create-overlay-from-comment-inside-or-forward*: Create overlay for current or next visible latex block in a comment.
 - *laic-create-overlays-from-comment-inside-or-forward*: Create overlays for all latex blocks in the current comment.
 - *laic-remove-overlays*: Remove all laic overlays.
+- *laic-remove-overlays-and-files*: Remove all laic overlays and delete cached images from disk.
 
 * Customization
 
@@ -109,3 +115,5 @@ invocation.
   but only supports a handful of languages, imposes additional
   requirements on comment formatting, and involves a slow HTML
   generation step.
+
+* TODO WIP                                                         :noexport:
