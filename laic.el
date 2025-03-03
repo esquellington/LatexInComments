@@ -10,17 +10,35 @@
 ;;
 ;;; Commentary:
 ;;
-;; Functionality:
+;; The package offers a few interactive functions to show and hide
+;; math blocks in comments:
 ;; - `laic-create-overlay-from-comment-inside-or-forward' Create overlay for current or next visible latex block in a comment.
 ;; - `laic-create-overlays-from-comment-inside-or-forward' Create overlays for all latex blocks in the current comment.
-;; - `laic-remove-overlays' Remove all laic overlays and delete all temporary files.
-;; - Temporary files are stored in the customizable `laic-output-dir' relative to current file path.
+;; - `laic-remove-overlays' Remove all laic overlays fromt the current buffer, but keep cached images on disk.
+;; - `laic-remove-overlays-and-files' Remove all laic overlays from the current buffer and delete cached images from disk.
 ;;
-;; Installation:
-;; - Add (require 'laic) to your (programming) mode hook.
-;; - Optionally add a local keybinding (suggested "C-c C-x C-l") to call
-;;   functions `laic-create-overlay-from-comment-inside-or-forward' and/or
-;;   `laic-create-overlays-from-comment-inside-or-forward'
+;; Temporary files are stored in the customizable `laic-output-dir'
+;; relative to current file path.
+;;
+;; Images are generated on first "create" operation, and cached for
+;; fast show/hide.  They are only deleted when a buffer is closed or
+;; when *laic-remove-overlays-and-files* is explicitly called.
+;;
+;; Installation: Add (require 'laic) to your (programming) mode hook,
+;; and defile keybindings to call interactive functions.
+;; For example:
+;; (add-hook 'prog-mode-hook
+;;  (function
+;;   (lambda ()
+;;    (require 'laic)
+;;    ;; Create overlay for current or next visible latex block in a comment.
+;;    (local-set-key (kbd "C-c C-x C-l") 'laic-create-overlay-from-latex-inside-or-forward)
+;;    ;; Create overlays for all latex blocks in the current comment.
+;;    (local-set-key (kbd "C-c C-x C-o") 'laic-create-overlays-from-comment-inside-or-forward)
+;;    ;; Remove all laic overlays
+;;    (local-set-key (kbd "C-c C-x o") 'laic-remove-overlays)
+;;    ;; Remove all laic overlays and delete cache
+;;    (local-set-key (kbd "C-c C-x r") 'laic-remove-overlays-and-files)
 ;;
 ;;; License:
 ;;
