@@ -7,6 +7,9 @@ https://github.com/esquellington/LatexInComments
 file:laic.el
 
 * References
+- org-lates-preview outside ORG is being worked on and looks
+  absolutely amazing, but not yet published it seems
+  - https://www.youtube.com/watch?v=u44X_th6_oY&t=15s
 - texfrag-moode
   - Enable C-c C-p C-p for preview-at-point or preview-region
   - Remove with preview-clearout-buffer

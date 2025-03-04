@@ -117,7 +117,7 @@ is never good.
 
 The main inspiration for both functionality and code structure was
 org-latex-preview, that offers more features and customization, but
-has a few drawbacks I wanted to overcome: only works in org-mode
+has a few drawbacks I wanted to avoid: only works in org-mode
 buffers by default, requires additional packages and configuration,
 and is somewhat slow on the first invocation.
 
@@ -128,15 +128,26 @@ For *laic* I prioritized simplicity and speed over features:
   code/comments sequentially.
 - instantaneous hide/show of cached images after first invocation.
 
+(N.B. org-latex-preview is under active development and has already
+overcome some of the drawbacks it had when I started working on
+*laic*)
+
 ** Alternatives
 
-- Within Emacs [[https://github.com/TobiasZawada/texfrag][texfrag]] is the only direct alternative I know of. It's
-  more general and ambitious than *laic*, but also slower and harder
-  to install, from my limited experience.
-- Outside Emacs [[https://www.doxygen.nl/manual/formulas.html][Doxygen]] supports LaTex math wrapped in its custom
-  "formula" tags, but only supports a handful of languages, imposes
-  additional requirements on comment formatting, and involves a slow
-  HTML generation step.
-- There seem to be several VS Code extensions that solve a similar
-  problem ([[https://marketplace.visualstudio.com/items?itemName=Remisa.mathover][mathover]], [[https://marketplace.visualstudio.com/items?itemName=vs-publisher-1305558.VsTeXCommentsExtension][TeX Comments]], [[https://marketplace.visualstudio.com/items?itemName=howcasperwhat.comment-formula][Comment Formula]]) but I can't
-  pretend I care :)
+Within Emacs:
+- [[https://github.com/TobiasZawada/texfrag][texfrag]] is the only direct alternative available at the time of
+  writing that I know of. It's more general and ambitious than *laic*,
+  but also slower and harder to install, from my experience.
+- org-latex-preview is being optimized for speed and extended to work
+  anywhere, including prog-mode comments, and looks extremely promising
+  https://www.youtube.com/watch?v=u44X_th6_oY&t=15s
+
+Outside Emacs:
+- [[https://www.doxygen.nl/manual/formulas.html][Doxygen]] is a well-known documentation generator from annotated code
+  comments, and supports LaTex math wrapped in its custom "formula"
+  tags, but only supports a handful of languages, imposes additional
+  requirements on comment formatting, and involves a slow HTML
+  generation step.
+- There are several VS Code extensions that solve a similar problem
+  ([[https://marketplace.visualstudio.com/items?itemName=Remisa.mathover][mathover]], [[https://marketplace.visualstudio.com/items?itemName=vs-publisher-1305558.VsTeXCommentsExtension][TeX Comments]], [[https://marketplace.visualstudio.com/items?itemName=howcasperwhat.comment-formula][Comment Formula]]) but I can't pretend I care
+  :)
