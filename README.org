@@ -59,7 +59,7 @@ keybindings for the desired interactive functions. Ex:
     (lambda ()
      (require 'laic)
      ;; Create overlay for current or next visible latex block in a comment.
-     (local-set-key (kbd "C-c C-x C-l") 'laic-create-overlay-from-latex-inside-or-forward)
+     (local-set-key (kbd "C-c C-x C-l") laic-create-overlay-from-comment-inside-or-forward)
      ;; Create overlays for all latex blocks in the current comment.
      (local-set-key (kbd "C-c C-x C-o") 'laic-create-overlays-from-comment-inside-or-forward)
      ;; Remove all laic overlays
