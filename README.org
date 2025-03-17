@@ -15,9 +15,9 @@ math blocks in comments:
   for current or next visible latex block in a comment, relative to
   cursor position.
 - *laic-create-overlays-from-comment-inside-or-forward*: Create
-  overlays for all latex blocks in the current comment, relative to
-  cursor position.
-- *laic-remove-overlays*: Remove all laic overlays fromt the current
+  overlays for all latex blocks in the current or next comment,
+  relative to cursor position.
+- *laic-remove-overlays*: Remove all laic overlays from the current
   buffer, but keep cached images on disk.
 - *laic-remove-overlays-and-files*: Remove all laic overlays from the
   current buffer and delete cached images from disk.

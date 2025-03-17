@@ -14,7 +14,7 @@
 ;; math blocks in comments:
 ;; - `laic-create-overlay-from-comment-inside-or-forward' Create overlay for current or next visible latex block in a comment.
 ;; - `laic-create-overlays-from-comment-inside-or-forward' Create overlays for all latex blocks in the current comment.
-;; - `laic-remove-overlays' Remove all laic overlays fromt the current buffer, but keep cached images on disk.
+;; - `laic-remove-overlays' Remove all laic overlays from the current buffer, but keep cached images on disk.
 ;; - `laic-remove-overlays-and-files' Remove all laic overlays from the current buffer and delete cached images from disk.
 ;;
 ;; Temporary files are stored in the customizable `laic-output-dir'
@@ -33,7 +33,7 @@
 ;;    (require 'laic)
 ;;    ;; Create overlay for current or next visible latex block in a comment.
 ;;    (local-set-key (kbd "C-c C-x C-l") 'laic-create-overlay-from-comment-inside-or-forward)
-;;    ;; Create overlays for all latex blocks in the current comment.
+;;    ;; Create overlays for all latex blocks in the current or next comment.
 ;;    (local-set-key (kbd "C-c C-x C-o") 'laic-create-overlays-from-comment-inside-or-forward)
 ;;    ;; Remove all laic overlays
 ;;    (local-set-key (kbd "C-c C-x o") 'laic-remove-overlays)
