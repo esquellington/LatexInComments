@@ -29,6 +29,13 @@
      \alpha &= ( \beta + \eta ) \\
      \gamma &= [ \delta - \nu ]
    \end{align*}
+
+   NOTE: xcolor package can be used if added, but causes default fg
+   color to revert to black, instead of using emacs face color, so it
+   doesn't work well
+
+   \[ \color{white}{\alpha_p} \]
+   \[ {\color[RGB]{247,189,0} \alpha_p} = -2.7 \]
 */
 
 /* laic BENCHMARK: 10 simple formulas, takes 0.7..1.0 sec

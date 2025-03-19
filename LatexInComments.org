@@ -190,7 +190,7 @@ ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.g
 - Convert
 - This is DWIM, as it minimizes unexpected behaviour but is also tolerant to being in any line within screen
 - Easy to implement too
-* DONE [#A] Cache + reuse unmodified overlays
+* DONE Cache + reuse unmodified overlays
 - Regenrating from scratch is slow, especially if there's multiple blocks
 - Toggling on/off req full rebuild now
 - Should be instant, probably latexpreview in org does this
@@ -200,14 +200,25 @@ ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.g
 ** DONE Ensure same latex block in different places reuses same pregen image
 ** DONE Cache img in laic--list-temp-files, not just file name
 ** DONE Retrieve img from cache, not filename, should be faster, avoids reloading files for different overlays
-* TODO [#A] Delete all tmp files on file close/emacs exit even if overlays are shown
+* DONE Delete all tmp files on file close/emacs exit even if overlays are shown
 - Otherwise we leave spurious files in laic-tmp when buffer or Emacs
   is closed with active overlays
-** TODO laic-cleanup
+** DONE laic-cleanup
 - Delete temporaries
 - Delete directory
 - Call on buffer and Emacs close for all buffers with overlays?
   - Would be a lot easier if laic were a minor mode, and call on mode exit
+* TODO [#B] Why is it so MUCH slower on Windows?
+- Could try to benchmark with minimal packages and trivial formula  \[ \aleph \]
+- It's >10 times slower than Linux
+* TODO [#B] Single command/keybinding C-c C-x C-l "DWIM" like org-latex-preview
+- Current keybindings are a bit cumbersome, try to DWIM with single
+  command, except for cleanup
+- If inside block, preview it (TOGGLE)
+- If outside block, preview all blocks
+- SEPARATE command to preview current-or-next?
+  \[ a+b =c \]
+- Try to use the same logic as org-mode latex preview
 * TODO [#C] Toggle overlay on/off with same keys?
 - remove-overlays can be called with BEGIN END, good for toggle, BUT would apply
   to all overlays
@@ -216,12 +227,6 @@ ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.g
 - SO, if point-in-comment, AND there's SOME overlay in the comment, remove all,
   otherwise, create all?
 - OR maybe same but if point-in-latex-block, remove it, otherwise, create it
-* TODO [#C] Single command/keybinding C-c C-x C-l "DWIM" like org-latex-preview
-- If inside block, preview it (TOGGLE)
-- If outside block, preview all blocks
-- SEPARATE command to preview current-or-next?
-  \[ a+b =c \]
-- Try to use the same logic as org-mode latex preview
 * TODO [#C] Laic as minor mode
 - verify ltex and dvipng commands work as configured, otherwise report
   useful message/suggestions
@@ -270,6 +275,9 @@ ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.g
 - Highlight subtly even when no overlay has been created, ideally subtly
   different shade of comment color, I think Org does something similar
 - This would be nice but should be optional
+** TODO Remove overlay when cursor gets inside latex block
+- new org-latex-preview seems to do this and it's cool, allows
+  interactive edit+regen, but not required if toggling on/off is easy enough
 * DONE BUGS
 ** DONE [#B] Multi-line latex blocks in single-line comments with per-line comment prefix do not work
 Ex, in elisp
@@ -305,3 +313,5 @@ nil"
 ** DONE [#C] LaTeX text size is hardcoded --> just customize it
 - Should adapt to font size at point I guess
 *** DONE Could customize DPI instead, because font size may be too small for LaTeX formulas anyway
+* TODO KNOWN ISSUES
+** Using xcolor package works and allows colored math, but overrides theme face color with black
