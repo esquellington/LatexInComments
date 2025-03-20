@@ -591,7 +591,9 @@ FGCOLOR and return it."
     (let (imagedata)
       (setq imagedata (pop laic--list-images))
       ;;(message "DELETING %s IMG" (nth 0 imagedata))
-      (delete-file (nth 0 imagedata)))))
+      (delete-file (nth 0 imagedata))))
+  ;;ensure img cache is cleared or they are not regen after remove+regen
+  (clear-image-cache))
 
 ;;----------------------------------------------------------------
 ;; Buffer/Region interactive functionality
