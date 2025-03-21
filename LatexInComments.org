@@ -278,7 +278,7 @@ ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.g
 ** TODO Remove overlay when cursor gets inside latex block
 - new org-latex-preview seems to do this and it's cool, allows
   interactive edit+regen, but not required if toggling on/off is easy enough
-* DONE BUGS
+* TODO BUGS
 ** DONE [#B] Multi-line latex blocks in single-line comments with per-line comment prefix do not work
 Ex, in elisp
 ;; \begin{equation}
@@ -313,5 +313,11 @@ nil"
 ** DONE [#C] LaTeX text size is hardcoded --> just customize it
 - Should adapt to font size at point I guess
 *** DONE Could customize DPI instead, because font size may be too small for LaTeX formulas anyway
-* TODO KNOWN ISSUES
-** Using xcolor package works and allows colored math, but overrides theme face color with black
+** DONE [#C] Deleted PNG remain in "cache" even if we delete files on disk, which means if we regen they're reused!
+- Would be more consistent to delete hash-cached images and ensure we
+  regen completely
+** TODO [#C] Using xcolor package works and allows colored math, but overrides theme face color with black :WIP:
+- Workaround, use xcolor inject LaTeX preamble to set text/background
+  color instead!
+- Works, but requires xcolor by default... not sure I wan to add that dependency
+- DECIDE if we add dependency, finish up if so
