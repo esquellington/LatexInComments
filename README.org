@@ -159,5 +159,5 @@ A ludicrous example of colorized equations in C++ comments using the
 "xcolor" package added in customized *laic-extra-packages*:
 #+html: <p align="center"> <img src="laic_colorized.png" width="95%" alt="Screen capture of a short C++ function with default and colorized formulas."/> </p>
 
-Custom math commands defined in customized *laic-user-preamble*:
+User-defined math commands added in customized *laic-user-preamble*:
 #+html: <p align="center"> <img src="laic_user_preamble.png" width="60%" alt="Screen capture of a short C++ function using custom math command."/> </p>
