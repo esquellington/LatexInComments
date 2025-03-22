@@ -151,3 +151,10 @@ Outside Emacs:
 - There are several VS Code extensions that solve a similar problem
   ([[https://marketplace.visualstudio.com/items?itemName=Remisa.mathover][mathover]], [[https://marketplace.visualstudio.com/items?itemName=vs-publisher-1305558.VsTeXCommentsExtension][TeX Comments]], [[https://marketplace.visualstudio.com/items?itemName=howcasperwhat.comment-formula][Comment Formula]]) but I can't pretend I care
   :)
+
+* Gallery
+Some reasonable and unreasonable uses of laic
+
+- Simplest example
+- additional xcolor
+- additional command

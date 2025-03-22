@@ -29,13 +29,18 @@
      \alpha &= ( \beta + \eta ) \\
      \gamma &= [ \delta - \nu ]
    \end{align*}
+*/
 
-   NOTE: xcolor package can be used if added, but causes default fg
-   color to revert to black, instead of using emacs face color, so it
-   doesn't work well
+/* Colorized formulas because why not? (requies extra package "xcolor")
 
-   \[ \color{white}{\alpha_p} \]
-   \[ {\color[RGB]{247,189,0} \alpha_p} = -2.7 \]
+   formulas are automatically rendered in the default comments color
+   \[ e^{ix} = \cos(x) + i\sin(x) \]
+
+   but can be colorized
+   \[ \color{white} e^{ix} = \cos(x) + i\sin(x) \]
+
+   even per-variable
+   \[ \color{white} \textcolor{pink}{e}^{\textcolor{green}{i} \textcolor{red}{x}} = \textcolor{cyan}{\cos(x)} + \textcolor{orange}{i\sin(x)} \]
 */
 
 /* laic BENCHMARK: 10 simple formulas, takes 0.7..1.0 sec

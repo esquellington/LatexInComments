@@ -208,12 +208,17 @@ ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.g
 - Delete directory
 - Call on buffer and Emacs close for all buffers with overlays?
   - Would be a lot easier if laic were a minor mode, and call on mode exit
-* DONE [#A] Customizable "latex preamble" to define macros etc
+* DONE Customizable "latex preamble" to define macros etc
 ** DONE add custom var + docs
 ** DONE move trace and det ops there
+** TODO Maybe example screenshot for the lulz (Gallery section at the end)
 * TODO [#B] Why is it so MUCH slower on Windows?
 - Could try to benchmark with minimal packages and trivial formula  \[ \aleph \]
 - It's >10 times slower than Linux
+** TODO Could it be (shell-command) being much slower on windows??
+- Try with EMPTY (shell-commnad)
+** TODO Could it be MikTeX being slower thatn TexLive?
+- Not sure, IIRC I'm using TexLive too?
 * TODO [#B] Single command/keybinding C-c C-x C-l "DWIM" like org-latex-preview
 - Current keybindings are a bit cumbersome, try to DWIM with single
   command, except for cleanup
