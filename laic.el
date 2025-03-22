@@ -86,9 +86,15 @@
   :type 'list)
 
 (defcustom laic-extra-packages ""
-  "List of extra package names, separated by commas.  Packages
-amsmath,amsfonts are included by default. NOTE: Adding extra
-packages may significantly slow preview generation down."
+  "List of extra package names, separated by commas.
+Packages amsmath,amsfonts are included by default.  NOTE: Adding
+extra packages may significantly slow preview generation down."
+  :group 'laic
+  :type 'string)
+
+(defcustom laic-user-preamble ""
+  "User-defined preamble, arbitrary LaTeX block.
+Can be used to define custom math operators, etc..."
   :group 'laic
   :type 'string)
 
@@ -196,7 +202,7 @@ packages may significantly slow preview generation down."
 
   ;; Try to create image
   (let (tmpfilename tmpfilename_tex tmpfilename_dvi tmpfilename_png
-        prefix packages extra fullcode
+        prefix packages fullcode
         img
         ;;start_time
         ;;current_time
@@ -216,15 +222,10 @@ packages may significantly slow preview generation down."
     (setq prefix "\\documentclass{article}\n\\pagestyle{empty}\n") ;minimal docuument class 10% faster, but limited
     (setq packages "\\usepackage{amsmath,amsfonts}\n") ;amsfonts adds \( \approx 0 \)  overhead, so add it
     (setq packages (concat packages "\\usepackage{" laic-extra-packages "}\n")) ;works even if empty
-    ;; TODO this should be extra latex preable or similar, user-defined and customizable
-    (setq extra (concat
-                 "\\DeclareMathOperator{\\trace}{tr}"
-                 "\\DeclareMathOperator{\\adjugate}{adj}"
-                 )) ;extra macros/operators
     (setq fullcode (concat
                     prefix
                     packages
-                    extra
+                    laic-user-preamble
                     ;; IF "xcolor" package is included we must set explicit background + text color (BUT no need for "color" package)
                     (when (string-match-p "xcolor" packages) ;nil if no match
                       (concat "\\pagecolor[HTML]{" (laic-convert-color-to-html-arg bgcolor) "}"
@@ -278,6 +279,8 @@ packages may significantly slow preview generation down."
     ;; \[ \pi \alpha \neq \beta \]
     ;; \[ \textcolor{red}{\alpha} \beta \]
     ;; \[ \textcolor{orange}{\alpha} {\color{green}\beta} \gamma \]
+    ;; laic-user-preamble
+    ;; \[ \textcolor{orange}{\trace(A)} \neq \det(B) \neq \textcolor{pink}{\adjugate(A)} \]
 
     ;; Create image object from filename
     (setq img (create-image tmpfilename_png))

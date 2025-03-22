@@ -208,9 +208,9 @@ ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.g
 - Delete directory
 - Call on buffer and Emacs close for all buffers with overlays?
   - Would be a lot easier if laic were a minor mode, and call on mode exit
-* TODO [#A] Customizable "latex preamble" to define macros etc
-** TODO add custom var + docs
-** TODO move trace and det ops there
+* DONE [#A] Customizable "latex preamble" to define macros etc
+** DONE add custom var + docs
+** DONE move trace and det ops there
 * TODO [#B] Why is it so MUCH slower on Windows?
 - Could try to benchmark with minimal packages and trivial formula  \[ \aleph \]
 - It's >10 times slower than Linux
