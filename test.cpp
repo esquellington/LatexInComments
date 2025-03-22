@@ -31,16 +31,24 @@
    \end{align*}
 */
 
-/* Colorized formulas because why not? (requies extra package "xcolor")
+/* Colorized formulas, because why not?
 
-   formulas are automatically rendered in the default comments color
-   \[ e^{ix} = \cos(x) + i\sin(x) \]
+   formulas are automatically rendered in the default comments color:
+     \[ e^{ix} = \cos(x) + i\sin(x) \]
+   -->
+     \[ e^{ix} = \cos(x) + i\sin(x) \]
 
-   but can be colorized
-   \[ \color{white} e^{ix} = \cos(x) + i\sin(x) \]
+   but color can be overriden per formula:
+     \[ \color{white} e^{ix} = \cos(x) + i\sin(x) \]
+   -->
+     \[ \color{white} e^{ix} = \cos(x) + i\sin(x) \]
 
-   even per-variable
-   \[ \color{white} \textcolor{pink}{e}^{\textcolor{green}{i} \textcolor{red}{x}} = \textcolor{cyan}{\cos(x)} + \textcolor{orange}{i\sin(x)} \]
+   or even per-variable:
+     \[ \color{white} \textcolor{pink}{e}^{\textcolor{green}{i} \textcolor{red}{x}} = \textcolor{cyan}{\cos(x)} + \textcolor{orange}{i\sin(x)} \]
+   -->
+     \[ \color{white} \textcolor{pink}{e}^{\textcolor{green}{i} \textcolor{red}{x}} = \textcolor{cyan}{\cos(x)} + \textcolor{orange}{i\sin(x)} \]
+
+   (customizing laic-extra-packages with additional package "xcolor")
 */
 
 /* laic BENCHMARK: 10 simple formulas, takes 0.7..1.0 sec
