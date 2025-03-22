@@ -51,6 +51,15 @@
    (customizing laic-extra-packages with additional package "xcolor")
 */
 
+/* Custom math commands
+
+   \[ \trace(A) = \sum_i A_{ii} \]
+   -->
+   \[ \trace(A) = \sum_i A_{ii} \]
+
+   (customizing laic-user-preamble as "\DeclareMathOperator{\trace}{tr}")
+*/
+
 /* laic BENCHMARK: 10 simple formulas, takes 0.7..1.0 sec
    Naked equations:
    inline \( \alpha = \beta \) formula

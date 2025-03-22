@@ -70,10 +70,11 @@ keybindings for the desired interactive functions. Ex:
 * Customization
 
 A few options can be customized with (customize-group 'laic)
-- *laic-block-delimiter-pairs*: list of balanced begin/end delimiter pairs.
-- *laic-command-dvipng*: defaults to "dvipng".
-- *laic-extra-packages*: additional packages can be added here (amsmath and amsfonts are included by default).
 - *laic-output-dir*: temporary files are stored in this folder, relative to current file path.
+- *laic-command-dvipng*: defaults to "dvipng".
+- *laic-block-delimiter-pairs*: list of balanced begin/end delimiter pairs.
+- *laic-extra-packages*: additional packages can be added here (amsmath and amsfonts are included by default).
+- *laic-user-preamble*: additional LaTeX preamble, can be used to define custom math operators, etc.
 
 * Motivation
 
@@ -154,7 +155,9 @@ Outside Emacs:
 * Gallery
 Some reasonable and unreasonable uses of laic
 
-#+html: <p align="center"> <img src="laic_colorized.png" width="75%" alt="Screen capture of a short C++ function with default and colorized formulas."/> </p>
-#+html: <p align="center"> A ludicrous example of colorized equations in C++ comments using the "xcolor" additional package</p>
+A ludicrous example of colorized equations in C++ comments using the
+"xcolor" additional package (customized *laic-extra-packages*):
+#+html: <p align="center"> <img src="laic_colorized.png" alt="Screen capture of a short C++ function with default and colorized formulas."/> </p>
 
-TODO: additional command in preamble
+Using custom matth commands defined in customized *laic-user-preamble*:
+#+html: <p align="center"> <img src="laic_user_preamble.png" width="95%" alt="Screen capture of a short C++ function using custom math command."/> </p>
