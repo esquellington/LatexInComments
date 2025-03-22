@@ -4,7 +4,6 @@ automatically and calls LaTeX under the hood to render them as images
 and display them as overlays.
 
 #+html: <p align="center"> <img src="laic_cpp_example.gif" width="75%" alt="Animated GIF image shows a short C++ function with a comment block that contains LaTeX-formatted math, alternating between their text and graphical representations."/> </p>
-
 #+html: <p align="center"> A somewhat excessive example of LaTeX in C++ comments </p>
 
 * Usage
@@ -155,6 +154,7 @@ Outside Emacs:
 * Gallery
 Some reasonable and unreasonable uses of laic
 
-- Simplest example
-- additional xcolor
-- additional command
+#+html: <p align="center"> <img src="laic_colorized.png" width="75%" alt="Screen capture of a short C++ function with default and colorized formulas."/> </p>
+#+html: <p align="center"> A ludicrous example of colorized equations in C++ comments using the "xcolor" additional package</p>
+
+TODO: additional command in preamble
