@@ -211,7 +211,7 @@ ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.g
 * DONE Customizable "latex preamble" to define macros etc
 ** DONE add custom var + docs
 ** DONE move trace and det ops there
-** TODO Maybe example screenshot for the lulz (Gallery section at the end)
+** DONE Maybe example screenshot for the lulz (Gallery section at the end)
 * TODO [#B] Why is it so MUCH slower on Windows?
 - Could try to benchmark with minimal packages and trivial formula  \[ \aleph \]
 - It's >10 times slower than Linux
