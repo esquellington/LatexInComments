@@ -141,6 +141,10 @@ packages may significantly slow preview generation down."
        ;; output "rgb r g b" with r,g,b \in [0..1]
        (format "rgb %f %f %f" (/ rnum 255.0) (/ gnum 255.0) (/ bnum 255.0))))
 
+(defun laic-convert-color-to-html-arg( color )
+  "Convert Emacs COLOR string \"#RRGGBB\" to HTML argument string RRGGBB."
+  (substring color 1 7))
+
 ;;--------------------------------
 ;; OS-specific
 ;;--------------------------------
@@ -193,10 +197,13 @@ packages may significantly slow preview generation down."
   ;; Try to create image
   (let (tmpfilename tmpfilename_tex tmpfilename_dvi tmpfilename_png
         prefix packages extra fullcode
-        img)
+        img
+        ;;start_time
+        ;;current_time
+        )
 
-    ;; Create unique temporary filename using Unix epoch in seconds DEPRECATED
-    ;;(setq tmpfilename (format "tmp-%d" (* 1000 (float-time))))
+    ;; PROFILE \[ \alpha = \beta \]
+    ;; (setq start_time (float-time))
 
     ;; Create unique temporary filename using hash
     (setq tmpfilename (secure-hash 'md5 (format "%s-%d-%s-%s" code dpi bgcolor fgcolor)))
@@ -209,6 +216,7 @@ packages may significantly slow preview generation down."
     (setq prefix "\\documentclass{article}\n\\pagestyle{empty}\n") ;minimal docuument class 10% faster, but limited
     (setq packages "\\usepackage{amsmath,amsfonts}\n") ;amsfonts adds \( \approx 0 \)  overhead, so add it
     (setq packages (concat packages "\\usepackage{" laic-extra-packages "}\n")) ;works even if empty
+    ;; TODO this should be extra latex preable or similar, user-defined and customizable
     (setq extra (concat
                  "\\DeclareMathOperator{\\trace}{tr}"
                  "\\DeclareMathOperator{\\adjugate}{adj}"
@@ -217,10 +225,19 @@ packages may significantly slow preview generation down."
                     prefix
                     packages
                     extra
+                    ;; IF "xcolor" package is included we must set explicit background + text color (BUT no need for "color" package)
+                    (when (string-match-p "xcolor" packages) ;nil if no match
+                      (concat "\\pagecolor[HTML]{" (laic-convert-color-to-html-arg bgcolor) "}"
+                              "\\color[HTML]{" (laic-convert-color-to-html-arg fgcolor) "}"))
                     "\\begin{document}\n"
                     code
                     "\n\\end{document}\n"))
     (write-region fullcode nil tmpfilename_tex)
+
+    ;; PROFILE \[ \alpha = \beta \]
+    ;;(setq current_time (float-time))
+    ;;(message "PROF/SOURCE %f" (- current_time start_time))
+    ;;(setq start_time current_time)
 
     ;; Run latex on tmp file and then run dvipng to generate trimmed image for
     ;; the latex block with desired fg/bg colours
@@ -230,6 +247,7 @@ packages may significantly slow preview generation down."
     ;; - dvipng
     ;;   -bg \"rgb 0.13 0.13 0.13\" using double quotes is required for Windows (Linux also supports single quotes '..')
     ;;   -bg Transparent works, but Emacs seems to ignore transparency
+    ;;   NOTE: explicit fg/bg only set when "xcolor" package is NOT included, but is neccessary for "color" packate
     ;;
     ;; TODO:
     ;; - Retrieve DPI programmatically and pass as -D argument
@@ -239,14 +257,27 @@ packages may significantly slow preview generation down."
                            ;; dvipng: .dvi -> .png
                            " " laic-OS-commandline-separator " " laic-command-dvipng
                            " -D " (number-to-string dpi) ;DPI
-                           " -bg \"" (laic-convert-color-to-dvipng-arg bgcolor) "\"" ;background color
-                           " -fg \"" (laic-convert-color-to-dvipng-arg fgcolor) "\"" ;foreground color
+                           ;; IF "xcolor" package is not included, we must set explicit background/foreground colors, but no need for "color"
+                           (when (not (string-match-p "xcolor" packages)) ;nil if match
+                             (concat " -bg \"" (laic-convert-color-to-dvipng-arg bgcolor) "\""   ;background color
+                                     " -fg \"" (laic-convert-color-to-dvipng-arg fgcolor) "\"")) ;foreground color
                            " -T tight" ;avoid whitespace -> equivalent to "convert -trim", but MUCH faster
                            " -q" ;quiet
                            " " tmpfilename_dvi ;input
                            " -o " tmpfilename_png ;output
                            laic-OS-null-sink)
                    nil nil)
+
+    ;; PROFILE \[ \alpha = \beta \]
+    ;;(setq current_time (float-time))
+    ;;(message "PROF/COMMAND %f" (- current_time start_time))
+    ;;(setq start_time current_time)
+
+    ;; Coloured text tests with "color" or "xcolor" packages
+    ;; - "color" does not show orange, "xcolor" does
+    ;; \[ \pi \alpha \neq \beta \]
+    ;; \[ \textcolor{red}{\alpha} \beta \]
+    ;; \[ \textcolor{orange}{\alpha} {\color{green}\beta} \gamma \]
 
     ;; Create image object from filename
     (setq img (create-image tmpfilename_png))
@@ -263,6 +294,11 @@ packages may significantly slow preview generation down."
 
     ;; Save (png img) for future deletion and reuse, as file must exist while overlay is visible
     (push (list tmpfilename_png img) laic--list-images)
+
+    ;; PROFILE \[ \alpha = \beta \]
+    ;;(setq current_time (float-time))
+    ;;(message "PROF/FINISH %f" (- current_time start_time))
+    ;;(setq start_time current_time)
 
     ;; Return image
     img))
