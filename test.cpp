@@ -60,6 +60,10 @@
    (customizing laic-user-preamble as "\DeclareMathOperator{\trace}{tr}")
 */
 
+/* Additional package "derivative" adds significant cost (2.5x slower)
+   \[ \odv{a}{b} \]
+*/
+
 /* laic BENCHMARK: 10 simple formulas, takes 0.7..1.0 sec
    Naked equations:
    inline \( \alpha = \beta \) formula
