@@ -62,6 +62,11 @@
 
 /* Additional package "derivative" adds significant cost (2.5x slower)
    \[ \odv{a}{b} \]
+   \[ \pdv{a}{b} \]
+
+   Or adding commands in laic-user-preamble (insignificant overhead)
+   \newcommand{\odv}[2]{\frac{\mathrm{d} #1}{\mathrm{d} #2}}
+   \newcommand{\pdv}[2]{\frac{\partial #1}{\partial #2}}
 */
 
 /* laic BENCHMARK: 10 simple formulas, takes 0.7..1.0 sec

@@ -212,13 +212,19 @@ ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.g
 ** DONE add custom var + docs
 ** DONE move trace and det ops there
 ** DONE Maybe example screenshot for the lulz (Gallery section at the end)
+* TODO Custom math commands for simple total/partial derivatives using \frac
+- packages are too slow, just redefine a simple one with minimal
+  features, using the "derivative" package syntaxis, maybe?
 * TODO [#B] Why is it so MUCH slower on Windows?
 - Could try to benchmark with minimal packages and trivial formula  \[ \aleph \]
 - It's >10 times slower than Linux
-** TODO Could it be (shell-command) being much slower on windows??
+** DONE Could it be (shell-command) being much slower on windows?? --> not so significantly
 - Try with EMPTY (shell-commnad)
-** TODO Could it be MikTeX being slower thatn TexLive?
+- 0.15s shell-command = cd, so slow, but not the slowest part
+- latex+dvipng both take >0.5s, latex more IIRC
+** TODO Could it be MikTeX being slower than TexLive?
 - Not sure, IIRC I'm using TexLive too?
+- Verify
 * TODO [#B] Single command/keybinding C-c C-x C-l "DWIM" like org-latex-preview
 - Current keybindings are a bit cumbersome, try to DWIM with single
   command, except for cleanup
@@ -227,7 +233,7 @@ ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.g
 - SEPARATE command to preview current-or-next?
   \[ a+b =c \]
 - Try to use the same logic as org-mode latex preview
-* TODO [#C] Toggle overlay on/off with same keys?
+** TODO [#C] Toggle overlay on/off with same keys?
 - remove-overlays can be called with BEGIN END, good for toggle, BUT would apply
   to all overlays
 - So we'd better look for laic--list-overlays in begin/end range and remove
@@ -235,12 +241,17 @@ ffmpeg -y -i input.webm -i palette.png -filter_complex paletteuse -r 10 output.g
 - SO, if point-in-comment, AND there's SOME overlay in the comment, remove all,
   otherwise, create all?
 - OR maybe same but if point-in-latex-block, remove it, otherwise, create it
-* TODO [#C] Laic as minor mode
+* TODO [#C] Laic as minor mode                                         :HARD:
 - verify ltex and dvipng commands work as configured, otherwise report
   useful message/suggestions
 - define minor mode keymap instead of individual keybindings
 - local list of overlays and toggle only these
 - optionally enable laic-view that automatically gens all overlays in view when scrilling around the buffer
+* TODO [#C] Optional centralized and/or persistent laic-tmp folder
+- Centralized in a global folder
+- Persist across runs
+- Would allow reusing images instead of regenerating, if used in
+  different source files in different folders
 * TODO BENCHMARK preview
 \begin{align*}
   \alpha &= \beta \\
